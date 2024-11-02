@@ -26,17 +26,17 @@ function fetchMenu() {
       const categoryHeader = document.createElement('div');
       categoryHeader.className = 'category-header';
       categoryHeader.innerHTML = `
-        <h2>${category.category_name}</h2>
+        <h3>${category.category_name}</h>
         <a href="category.html?category=${encodeURIComponent(category.category_name)}">Hepsini Gör</a>
       `;
       menuContainer.appendChild(categoryHeader);
 
       // Kategori başlığını categoryTitles'a ekleme
-      const categoryTitle = document.createElement('div');
-      categoryTitle.className = 'category-title';
-      categoryTitle.innerText = category.category_name;
-      categoryTitle.addEventListener('click', () => scrollToCategory(category.category_name));
-      categoryTitles.appendChild(categoryTitle);
+      const categoryButton = document.createElement('button');
+      categoryButton.className = 'category-button';
+      categoryButton.innerText = category.category_name;
+      categoryButton.addEventListener('click', () => scrollToCategory(category.category_name));
+      categoryTitles.appendChild(categoryButton);
 
       // Menü öğelerini listeleme
       const itemContainer = document.createElement('div');
