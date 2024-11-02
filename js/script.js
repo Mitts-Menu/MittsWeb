@@ -46,11 +46,8 @@ function fetchMenu() {
       category.items.forEach(item => {
         const menuItem = document.createElement('div');
         menuItem.className = 'menu-item';
-        menuItem.innerHTML = `
-          <img src="${item.image_url}" alt="${item.name}">
-          <h3>${item.name}</h3>
-          <p>${item.price} ₺</p>
-        `;
+        const itemName = item.name;
+        
         itemContainer.appendChild(menuItem);
       });
 
