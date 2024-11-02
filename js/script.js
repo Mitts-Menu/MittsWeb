@@ -27,7 +27,7 @@ function fetchMenu() {
       categoryHeader.className = 'category-header';
       categoryHeader.innerHTML = `
         <h2>${category.category_name}</h2>
-        <a href="#">Hepsini Gör</a>
+        <a href="category.html?category=${encodeURIComponent(category.category_name)}">Hepsini Gör</a>
       `;
       menuContainer.appendChild(categoryHeader);
 
