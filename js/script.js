@@ -106,9 +106,8 @@ function renderMenuItems(category) {
 // Menü öğesini oluşturma
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
-  menuItem.className = 'menu-item';
+  menuItem.className = 'menu-item'; 
   const fontSize = item.name.length > 20 ? '14px' : '18px';
-
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">
     <h3 style="font-size: ${fontSize};">${item.name}</h3>
