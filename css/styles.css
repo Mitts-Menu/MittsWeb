@@ -11,21 +11,59 @@ body {
   background-color: #f5f5f5;
   font-size: 16px; /* 1rem = 16px */
   margin: 0 20rem;
+  user-select: none;
 }
 
 /* Header */
 .header {
   background-color: #fff;
   height: 7rem;
-  padding-left: 3em;
-  padding-right: 3em;
-  padding-top: 1em;
-  padding-bottom: 1.3em;
+  padding: 1em 3em;
   margin-bottom: 3em;
   display: flex;
-  align-items: center; /* Görseli dikeyde ortalamak için */
+  align-items: center;
+  justify-content: space-between;
+  position: relative; /* Arama çubuğunun altında öneri listesi için konumlandırma */
 }
 
+.search-container {
+  position: relative; /* Öneri listesinin konumunu ayarlamak için */
+}
+
+#search-bar {
+  width: 35rem; /* Arama çubuğunun genişliği */
+  padding: 0.5rem; /* İçerik için boşluk */
+  border: 1px solid #ccc; /* Kenarlık */
+  border-radius: 5px; /* Kenarları yuvarlamak için */
+  font-size: 1rem; /* Yazı boyutu */
+}
+
+.suggestions {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  position: absolute; /* Arama çubuğunun altında konumlandırmak için */
+  z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
+  max-height: 200px; /* Maksimum yükseklik */
+  overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
+  width: 35rem; /* Arama çubuğunun genişliğiyle aynı */
+  display: none; /* Başlangıçta gizli */
+  top: 100%; /* Arama çubuğunun altına yerleştirin */
+  left: 0; /* Arama çubuğunun sol kenarıyla hizalayın */
+}
+.suggestion-item {
+  display: flex; /* Resim ve metni yan yana yerleştirmek için */
+  align-items: center; /* Dikey ortalamak için */
+  padding: 0.5rem;
+  cursor: pointer; /* Üzerine gelindiğinde imleci değiştirmek için */
+}
+
+.suggestion-item img {
+  width: 2rem; /* Resim genişliği */
+  height: 2rem; /* Resim yüksekliği */
+  border-radius: 50%; /* Daire şeklinde yapar */
+  margin-right: 0.5rem; /* Resim ile metin arasında boşluk */
+}
 .header img {
   width: 11rem; 
   height: auto;
@@ -103,10 +141,30 @@ body {
 
 .item-container {
   display: flex;
-  overflow-x: auto;
+  overflow-x: auto; /* İçerik taşarsa kaydırma sağlar */
+  overflow-y: hidden; /* Dikey kaydırmayı gizle */
   gap: 1.25rem;
   margin-top: 0.5rem;
-  padding: 0.625rem 0; 
+  padding: 0.625rem 0;
+  scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
+}
+/* yukarı kaydır butonu */ 
+#scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  display: none; /* Başlangıçta görünmez */
+  z-index: 1000; /* Diğer öğelerin üstünde görünmesi için */
+}
+
+#scroll-to-top:hover {
+  background-color: #0056b3; /* Üzerine gelindiğinde butonun rengini değiştirme */
 }
 
 /* Menü Öğeleri için Stil */
@@ -127,6 +185,7 @@ body {
 }
 
 .menu-item img {
+  pointer-events: none; /* Resimlere tıklanmayı engelle */
   height: 15rem; /* Resim yüksekliği sabit */
   width: 15rem; /* Resim genişliği sabit */
   object-fit: contain; /* Resmin kesilmesini engellemek için */
