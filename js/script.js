@@ -20,13 +20,12 @@ const categoryTitles = document.getElementById('category-titles');
 
 function fetchMenu() {
   database.ref('menu').once('value').then(snapshot => {
-    console.log(snapshot.val()); // Veriyi kontrol edin
     snapshot.val().forEach(category => {
       // Kategori başlığını oluşturma
       const categoryHeader = document.createElement('div');
       categoryHeader.className = 'category-header';
       categoryHeader.innerHTML = `
-        <h3>${category.category_name}</h>
+        <h3>${category.category_name}</h3>
         <a href="category.html?category=${encodeURIComponent(category.category_name)}">Hepsini Gör</a>
       `;
       menuContainer.appendChild(categoryHeader);
@@ -46,7 +45,15 @@ function fetchMenu() {
       category.items.forEach(item => {
         const menuItem = document.createElement('div');
         menuItem.className = 'menu-item';
-        const itemName = item.name;
+        
+        // Ürün adını ve font boyutunu ayarla
+        const fontSize = item.name.length > 20 ? '14px' : '18px';
+        
+        menuItem.innerHTML = `
+          <img src="${item.image_url}" alt="${item.name}">
+          <h3 style="font-size: ${fontSize};">${item.name}</h3>
+          <p>${item.price} ₺</p>
+        `;
         
         itemContainer.appendChild(menuItem);
       });
