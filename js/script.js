@@ -83,7 +83,7 @@ function renderMenuItems(category) {
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item';
-    const fontSize = item.name.length > 15 ? '13px' : '18px';
+    const fontSize = item.name.length > 20 ? '14px' : '18px';
   
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">

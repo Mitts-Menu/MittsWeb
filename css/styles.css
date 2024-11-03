@@ -167,6 +167,25 @@ body {
   object-fit: cover; /* Resmin kesilmesini engellemek için */
 }
 
+.category-content{
+  display: flex;
+  background-color: #fff;
+  border-radius: 1.5rem;
+}
+
+.content-img{
+  flex: 1;
+  width: 5rem;
+}
+
+.content-img img{
+  width: 100%;
+}
+
+.content-desc{
+  flex: 3;
+}
+
 /* Responsive Ayarlar */
 
 /* Mobil Cihazlar için (max-width: 600px) */

@@ -27,11 +27,15 @@ const firebaseConfig = {
         if (category.category_name === categoryName) {
           category.items.forEach(item => {
             const menuItem = document.createElement('div');
-            menuItem.className = 'menu-item';
+            menuItem.className = 'category-content';
             menuItem.innerHTML = `
-              <img src="${item.image_url}" alt="${item.name}">
-              <h3>${item.name}</h3>
-              <p>${item.price} ₺</p>
+              <div class="content-img">
+                <img src="${item.image_url}" alt="${item.name}">
+              </div>
+              <div class="content-desc">
+                <h3>${item.name}</h3>
+                <p>${item.price} ₺</p>
+              </div>
             `;
             categoryProductsContainer.appendChild(menuItem);
           });
