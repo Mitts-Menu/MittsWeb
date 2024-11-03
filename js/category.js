@@ -35,6 +35,8 @@ const firebaseConfig = {
               <div class="content-desc">
                 <h3>${item.name}</h3>
                 <p>${item.price} ₺</p>
+                <p class="item-description">${item.description}</p> <!-- Açıklama eklendi -->
+                <p class="item-allergens">Alerjenler: ${item.allergens.join(', ')}</p> <!-- Alerjenler eklendi -->
               </div>
             `;
             categoryProductsContainer.appendChild(menuItem);
@@ -45,6 +47,7 @@ const firebaseConfig = {
       console.error("Veri çekme hatası:", error);
     });
   }
+  
   
   // Kategori ürünlerini çek
   fetchCategoryProducts();
