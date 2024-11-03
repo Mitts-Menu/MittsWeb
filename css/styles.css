@@ -1,9 +1,16 @@
+@font-face {
+  font-family: Mulish;
+  src: url('../font/Mulish-Regular.ttf'); /* Font dosyasının yolunu belirt */
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Genel Stil Ayarları */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Mulish;
   background-color: #f5f5f5;
-  color: #333;
   font-size: 16px; /* 1rem = 16px */
+  margin: 0 20rem;
 }
 
 /* Header */
@@ -14,6 +21,7 @@ body {
   padding-right: 3em;
   padding-top: 1em;
   padding-bottom: 1.3em;
+  margin-bottom: 3em;
   display: flex;
   align-items: center; /* Görseli dikeyde ortalamak için */
 }
@@ -25,8 +33,6 @@ body {
 
 .menu-container {
   max-width: 50rem;
-  margin: 1.25rem auto;
-  padding: 1.25rem; 
   background-color: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -80,22 +86,35 @@ body {
 .category-header h3 {
   font-size: 1.5rem; 
   color: #666687;
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.category-header a {
+  color: #666687;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.category-header a:hover {
+  color: #FFB01D;
+  transition: .5s;
 }
 
 .item-container {
   display: flex;
   overflow-x: auto;
   gap: 1.25rem;
-  margin-top: 0.625rem;
+  margin-top: 0.5rem;
   padding: 0.625rem 0; 
 }
 
 /* Menü Öğeleri için Stil */
 .menu-item {
   width: 15rem; 
-  height: 20rem; /* Yükseklik sabit */
+  height: 21rem; /* Yükseklik sabit */
   background-color: #fff;
-  border-radius: 0.5rem; 
+  border-radius: 1.5rem; 
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   text-align: center;
   padding: 0.625rem;
@@ -116,12 +135,14 @@ body {
 .menu-item h3 {
   font-size: 1.125rem; 
   color: #333;
-  margin: 0.625rem 0; 
+  max-height: 1rem;
+  padding: 0.1rem .6rem .5rem .6rem; 
 }
 
 .menu-item p {
   font-size: 1rem; 
   color: #f57c00;
+  font-weight: bold;
 }
 
 /* category.html için Stil Ayarlamaları */
