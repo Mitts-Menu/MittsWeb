@@ -47,6 +47,7 @@ const firebaseConfig = {
     });
   }
   
+  
   // Kategori ürünlerini çek
   fetchCategoryProducts();
   
