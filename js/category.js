@@ -34,9 +34,8 @@ const firebaseConfig = {
               </div>
               <div class="content-desc">
                 <h3>${item.name}</h3>
-                <p>${item.price} ₺</p>
-                <p class="item-description">${item.description}</p> <!-- Açıklama eklendi -->
-                <p class="item-allergens">Alerjenler: ${item.allergens.join(', ')}</p> <!-- Alerjenler eklendi -->
+                <p class="item-description">${item.description}</p>
+                <p class="item-price">${item.price} ₺</p>
               </div>
             `;
             categoryProductsContainer.appendChild(menuItem);

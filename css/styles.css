@@ -238,11 +238,28 @@ body {
 }
 
 .content-img img{
-  width: 100%;
+  width: 15em;
+  height: 15em;
+  object-fit: contain;
 }
 
 .content-desc{
   flex: 3;
+
+}
+
+.content-desc h3{
+  color: #32324D;
+  font-weight: bold;
+}
+
+.item-description{
+  color: #C0C0CF;
+}
+
+.item-price{
+  color: #f57c00;
+  font-weight: bold;
 }
 
 /* Responsive Ayarlar */
