@@ -7,33 +7,35 @@
    <title>Menü</title>
 </head>
 <body>
-    <div class="header">
-        <img class="header-img" src="../img/mitts_logo.png" alt="Logo">
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
-            <div id="suggestions" class="suggestions"></div> <!-- Öneri penceresi -->
+    <div class="container">
+        <div class="header">
+            <img class="header-img" src="../img/mitts_logo.png" alt="Logo">
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
+                <div id="suggestions" class="suggestions">
+                    <div id="suggestion-img" class="suggestion-img"></div>
+                </div>
+            </div>
+        </div>
+        <div class="content-container">
+        <div id="menu-container">
+            <div id="category-titles"></div>
         </div>
     </div>
-    <div class="container">
-        <div class="container-1">
-            <div id="menu-container">
-                <div id="category-titles"></div>
-            </div>
+</div>
 
-            <!-- Bottom Sheet -->
-            <div id="overlay" class="overlay"></div>
-            <div id="bottomSheet" class="bottom-sheet">
-            <div class="bottom-sheet-content">
-                <div class="content-img">
+    <!-- Bottom Sheet -->
+    <div id="overlay" class="overlay"></div>
+    <div id="bottomSheet" class="bottom-sheet">
+        <div class="bottom-sheet-content">
+            <div class="content-img">
                 <img id="itemImage" src="" alt="Item Image" />
             </div>
             <div class="content-desc">
-            <h3 id="itemName"></h3>
-            <p id="itemPrice"></p>
-            <p id="itemDescription"></p>
-        </div>
-        </div>
-        </div>
+                <h3 id="itemName"></h3>
+                <p id="itemPrice"></p>
+                <p id="itemDescription"></p>
+            </div>
         </div>
     </div>
 

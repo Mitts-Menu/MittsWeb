@@ -1,6 +1,6 @@
 @font-face {
   font-family: Mulish;
-  src: url('../font/Mulish-Regular.ttf'); /* Font dosyasının yolunu belirt */
+  src: url('../font/Mulish-Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -11,12 +11,12 @@ body {
   background-color: #f5f5f5;
   font-size: 16px; /* 1rem = 16px */
   user-select: none;
+  margin: 0;
 }
 
 .container {
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
+  width: auto; 
+  margin: 0 auto;
 }
 
 /* Header */
@@ -28,7 +28,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative; /* Arama çubuğunun altında öneri listesi için konumlandırma */
+  position: relative;
 }
 
 .header-img {
@@ -36,12 +36,15 @@ body {
   height: auto;
 }
 
+/* Search bar */
 .search-container {
-  position: relative; /* Öneri listesinin konumunu ayarlamak için */
+  position: relative;
+  margin-right: 3em;
 }
 
 #search-bar {
-  width: 35rem; /* Arama çubuğunun genişliği */
+  width: 100%; /* Arama çubuğunun genişliği */
+  max-width: 35rem;
   height: 2rem;
   padding: .5em 1.5em; /* İçerik için boşluk */
   border: 1px solid #ccc; /* Kenarlık */
@@ -62,7 +65,7 @@ body {
   z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
   max-height: 15rem; /* Maksimum yükseklik */
   overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
-  width: 35rem; /* Arama çubuğunun genişliğiyle aynı */
+  width: 100%; /* Arama çubuğunun genişliğiyle aynı */
   display: none; /* Başlangıçta gizli */
   top: 100%; /* Arama çubuğunun altına yerleştirin */
   left: 1.5rem; /* Arama çubuğunun sol kenarıyla hizalayın */
@@ -89,12 +92,22 @@ body {
   margin-bottom: 1em;
 }
 
+/* Category Menü */
+
+.content-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; 
+}
+
 .menu-container {
   max-width: 50rem;
   background-color: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
+
+/* Üst kategori başlıkları */
 
 #category-titles {
   display: flex; /* Flexbox kullanarak yan yana hizala */
@@ -135,17 +148,12 @@ body {
   overflow-x: auto;
 }
 
-.category-title {
-  background-color: #fff;
-  cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
-}
-
 .category-title:hover {
   text-decoration: underline;
 }
 
+
+/* Kategori Menü İçeriği */
 .category-header {
   display: flex;
   justify-content: space-between;
@@ -170,12 +178,16 @@ body {
   color: #FFB01D;
   transition: .5s;
 }
-/* bıttınahhwr*/
+
+/* bottom sheet*/
 .bottom-sheet {
   position: fixed;
+  width: 100%;
+  max-width: 1200px;
   bottom: 0;
   left: 0;
   right: 0;
+  margin: 0 auto;
   background: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   transform: translateY(100%); /* Başlangıçta gizli */
@@ -234,7 +246,8 @@ body {
 
 /* Menü Öğeleri için Stil */
 .menu-item {
-  width: 15rem; 
+  width: calc(100% - 1.25rem); /* Ekranın %100'ü - boşluklar */
+  max-width: 15rem; 
   height: 21rem; /* Yükseklik sabit */
   background-color: #fff;
   border-radius: 1.5rem; 
@@ -339,80 +352,91 @@ body {
   margin-top: 0;
 }
 
-/* Responsive Ayarlar */
-
-/* Büyük ekranlar için orijinal düzeni korur */
-@media (min-width: 1200px) {
-  .container {
-    display: grid;
-    grid-template-columns: 1fr minmax(auto, 1200px) 1fr;
-  }
-  
-  .container-1 {
-    grid-column: 2;
-  }
-}
-
-/* Orta ekranlar (tabletler) için düzen */
-@media (max-width: 1199px) {
-  #search-bar {
-    width: 25rem; /* Arama çubuğu genişliğini küçült */
-  }
-  .menu-item {
-    width: 12rem; /* Menü öğesi genişliğini azalt */
-    height: auto; /* Yüksekliği otomatik ayarla */
-  }
-  .suggestions, #category-titles {
-    width: 25rem; /* Öneri listesi ve kategori başlıkları */
-  }
-}
-
-/* Küçük ekranlar (mobil) için düzen */
-@media (max-width: 768px) {
+/* Mobil Ekran Duyarlılığı */
+@media (max-width: 600px) {
   .header {
-    flex-direction: column; /* Başlık bölümünü dikey hizala */
-    padding: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  .header-img {
+    align-self: center;
+    margin-bottom: .5em;
+  }
+  
+  /* Search bar */
+  .search-container {
+    position: relative;
+    align-self: center;
+    padding-bottom: .5em;
   }
   
   #search-bar {
-    width: 100%; /* Arama çubuğunu tam genişlik yap */
-    margin-bottom: 1rem; /* Altında boşluk bırak */
+    height: 1.5rem;
   }
 
-  .suggestions, #category-titles {
-    width: 100%; /* Öneri listesi ve kategori başlıkları tam genişlik */
-    left: 0;
+  .category-button {
+    font-size: 1rem; /* Daha küçük yazı boyutu */
+    padding: .75rem; /* Daha az boşluk */
+    margin-top: 0;
   }
 
-  .menu-container {
-    max-width: 100%; /* Menü kabını tam genişlik yap */
+  .menu-item {
+    width: 100%; /* Mobilde tam genişlik */
+  }
+
+  .category-header h3 {
+    font-size: 1.25rem; /* Daha küçük başlık boyutu */
+  }
+
+  .menu-item img {
+    height: 5rem; /* Resim boyutunu küçült */
+    width: 5rem;
+    margin: .5em .5em;
+  }
+
+  .menu-item {
+    max-width: 7rem; 
+    height: 10rem; /* Yükseklik sabit */
+    background-color: #fff;
+    border-radius: 1.5rem; 
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 0.625rem;
+    transition: transform 0.2s;
+    flex-shrink: 0; /* Boyutların değişmemesi için */
   }
   
-  .menu-item {
-    width: 100%; /* Menü öğelerini tam genişlik yap */
-    height: auto;
+  .menu-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .menu-item h3 {
+    font-size: .75rem; 
+    color: #32324D;
+    max-height: 1rem;
+    padding: 0.1rem .1rem .1rem .1rem; 
+    margin: 0;
+  }
+  
+  .menu-item p {
+    font-size: 1rem; 
+    color: #f57c00;
+    font-weight: bold;
   }
 
-  .suggestion-item img {
-    width: 4rem; /* Öneri resmi boyutunu küçült */
-    height: 4rem;
+  #scroll-to-top {
+    bottom: 15px; /* Mobilde yukarı kaydır butonunun konumu */
+    right: 15px;
+    padding: 8px; /* Daha az boşluk */
   }
 }
 
-/* Daha küçük ekranlar (örneğin telefonlar) için tasarım */
-@media (max-width: 480px) {
-  .category-button {
-    font-size: 1rem; /* Buton yazı boyutunu küçült */
-    padding: 0.5rem; /* İç boşluğu azalt */
-  }
-  
-  .menu-item img {
-    width: 100%; /* Menü öğesi resmini tam genişlik yap */
-    height: auto;
-  }
-
-  .content-img img {
-    width: 100%; /* İçerik resmini tam genişlik yap */
-    height: auto;
+@media (min-width: 601px) and (max-width: 1024px) {
+  .menu-item {
+    width: calc(50% - 1.25rem); /* Tabletlerde yarım genişlik */
   }
 }
