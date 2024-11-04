@@ -8,11 +8,21 @@
     </head>
     <body>
         <div class="header">
-            <img src="../img/mitts_logo.png">
+            <img class="header-img" src="../img/mitts_logo.png" alt="Logo">
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
+                <div id="suggestions" class="suggestions"></div> <!-- Öneri penceresi -->
+            </div>
         </div>
-        <div id="category-products-container"></div> <!-- Kategori ürünlerini buraya ekleyeceğiz -->
+        <div class="container">
+            <div class="container-1">
+                <div id="category-products-container"></div>
+            </div>
+        </div>
+        
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-        <script src="../js/category.js"></script> <!-- Kategori ürünlerini çekmek için ayrı bir script -->
+        <script src="../js/category.js"></script>
+
     </body>
 </html>

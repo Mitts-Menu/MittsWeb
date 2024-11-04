@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="../img/mitts_logo.png" alt="Logo">
+        <img class="header-img" src="../img/mitts_logo.png" alt="Logo">
         <div class="search-container">
             <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
             <div id="suggestions" class="suggestions">
@@ -16,8 +16,12 @@
             </div>
         </div>
     </div>
-    <div id="menu-container">
-        <div id="category-titles"></div>
+    <div class="container">
+        <div class="container-1">
+            <div id="menu-container">
+                <div id="category-titles"></div>
+            </div>
+        </div>
     </div>
     <!-- Bottom Sheet -->
     <div id="overlay" class="overlay"></div>
@@ -36,6 +40,7 @@
 
     <button id="scroll-to-top" style="display: none;">Yukarı Çık</button>
 
+    <button id="scroll-to-top" style="display: none;">Yukarı Çık</button>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     
