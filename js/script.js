@@ -54,38 +54,11 @@ function createCategoryHeader(category) {
 
 // Kategori butonunu oluşturma
 function createCategoryButton(category) {
-
-  let isMouseDown = false; // Fare basılı mı
-  let startX; // Başlangıç X koordinatı
-  let scrollLeft; // Başlangıç kaydırma değeri
-
   const categoryButton = document.createElement('button');
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
   categoryButton.addEventListener('click', () => scrollToCategory(category.category_name));
   categoryTitles.appendChild(categoryButton);
-
-  categoryTitles.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    startX = e.pageX - categoryTitles.offsetLeft; // Fare basıldığında başlangıç pozisyonunu al
-    scrollLeft = categoryTitles.scrollLeft; // Başlangıç kaydırma değerini al
-  });
-
-  categoryTitles.addEventListener('mouseleave', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
-  });
-
-  categoryTitles.addEventListener('mouseup', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
-  });
-
-  categoryTitles.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return; // Eğer fare basılı değilse, işleme devam etme
-    e.preventDefault(); // Varsayılan kaydırmayı durdur
-    const x = e.pageX - categoryTitles.offsetLeft; // Şu anki X koordinatını al
-    const walk = (x - startX) * 2; // Kaydırma hızı
-    categoryTitles.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
-  });
 }
 
 // Menü öğelerini listeleme
@@ -133,9 +106,8 @@ function renderMenuItems(category) {
 // Menü öğesini oluşturma
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
-  menuItem.className = 'menu-item';
+  menuItem.className = 'menu-item'; 
   const fontSize = item.name.length > 20 ? '14px' : '18px';
-
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">
     <h3 style="font-size: ${fontSize};">${item.name}</h3>
@@ -176,7 +148,7 @@ function filterItems() {
 
       // Resmi oluştur
       const img = document.createElement('img');
-      img.src = item.image; // Her öğe için resim kaynağını atayın
+      img.src = item.image_url; // Her öğe için resim kaynağını atayın
       img.alt = item.name; // Erişilebilirlik için alt metin
 
       // Metni oluştur

@@ -10,8 +10,13 @@ body {
   font-family: Mulish;
   background-color: #f5f5f5;
   font-size: 16px; /* 1rem = 16px */
-  margin: 0 20rem;
   user-select: none;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
 }
 
 /* Header */
@@ -26,47 +31,62 @@ body {
   position: relative; /* Arama çubuğunun altında öneri listesi için konumlandırma */
 }
 
+.header-img {
+  width: 11rem; 
+  height: auto;
+}
+
 .search-container {
   position: relative; /* Öneri listesinin konumunu ayarlamak için */
 }
 
 #search-bar {
   width: 35rem; /* Arama çubuğunun genişliği */
-  padding: 0.5rem; /* İçerik için boşluk */
+  height: 2rem;
+  padding: .5em 1.5em; /* İçerik için boşluk */
   border: 1px solid #ccc; /* Kenarlık */
-  border-radius: 5px; /* Kenarları yuvarlamak için */
+  border-radius: 2rem; /* Kenarları yuvarlamak için */
   font-size: 1rem; /* Yazı boyutu */
+  outline: none;
+}
+
+#search-bar:hover {
+  border: 1px solid #FFB01D; /* Kenarlık */
 }
 
 .suggestions {
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 0 0 3em 3em;
   background-color: #fff;
   position: absolute; /* Arama çubuğunun altında konumlandırmak için */
   z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
-  max-height: 200px; /* Maksimum yükseklik */
+  max-height: 15rem; /* Maksimum yükseklik */
   overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
   width: 35rem; /* Arama çubuğunun genişliğiyle aynı */
   display: none; /* Başlangıçta gizli */
   top: 100%; /* Arama çubuğunun altına yerleştirin */
-  left: 0; /* Arama çubuğunun sol kenarıyla hizalayın */
+  left: 1.5rem; /* Arama çubuğunun sol kenarıyla hizalayın */
+  scrollbar-width: none;
 }
+
+.suggestions::-webkit-scrollbar {
+  display: none;
+}
+
 .suggestion-item {
   display: flex; /* Resim ve metni yan yana yerleştirmek için */
   align-items: center; /* Dikey ortalamak için */
   padding: 0.5rem;
   cursor: pointer; /* Üzerine gelindiğinde imleci değiştirmek için */
+  height: 7rem;
 }
 
 .suggestion-item img {
-  width: 2rem; /* Resim genişliği */
-  height: 2rem; /* Resim yüksekliği */
-  border-radius: 50%; /* Daire şeklinde yapar */
+  width: 7rem; /* Resim genişliği */
+  height: 7rem; /* Resim yüksekliği */
+  object-fit: contain;
   margin-right: 0.5rem; /* Resim ile metin arasında boşluk */
-}
-.header img {
-  width: 11rem; 
-  height: auto;
+  margin-bottom: 1em;
 }
 
 .menu-container {
@@ -208,7 +228,7 @@ body {
 
 .menu-item h3 {
   font-size: 1.125rem; 
-  color: #333;
+  color: #32324D;
   max-height: 1rem;
   padding: 0.1rem .6rem .5rem .6rem; 
 }
@@ -245,11 +265,17 @@ body {
   display: flex;
   background-color: #fff;
   border-radius: 1.5rem;
+  margin-bottom: 1.5rem;
+  height: auto;
 }
 
 .content-img{
   flex: 1;
   width: 5rem;
+  display: flex;
+  align-items: center; /* Resmin dikey olarak ortalanmasını sağlar */
+  justify-content: center;
+  padding: 1rem;
 }
 
 .content-img img{
@@ -260,89 +286,103 @@ body {
 
 .content-desc{
   flex: 3;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .content-desc h3{
   color: #32324D;
   font-weight: bold;
+  margin-bottom: .5em;
 }
 
 .item-description{
   color: #C0C0CF;
+  margin-top: 0;
+  margin-bottom: 2em;
 }
 
 .item-price{
   color: #f57c00;
   font-weight: bold;
+  margin-top: 0;
 }
 
 /* Responsive Ayarlar */
 
-/* Mobil Cihazlar için (max-width: 600px) */
-@media (max-width: 37.5rem) {
-  .menu-container {
-    padding: 0.625rem; /* 10px */
+/* Büyük ekranlar için orijinal düzeni korur */
+@media (min-width: 1200px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr minmax(auto, 1200px) 1fr;
   }
-
-  .category-titles {
-    flex-direction: column;
-    align-items: center;
-    padding: 0.3125rem; /* 5px */
-  }
-
-  .item-container {
-    flex-direction: column;
-    gap: 0.625rem; /* 10px */
-  }
-
-  .menu-item {
-    width: 100%;
-  }
-
-  .category-header h2 {
-    font-size: 1.25rem; /* 20px */
-  }
-
-  .menu-item img,
-  .category-menu-item img {
-    max-width: 5rem; /* 80px */
-  }
-
-  .header {
-    height: auto;
-  }
-
-  .header img {
-    width: 5rem; /* 80px */
+  
+  .container-1 {
+    grid-column: 2;
   }
 }
 
-/* Tablet Cihazlar için (min-width: 601px ve max-width: 1024px) */
-@media (min-width: 37.5625rem) and (max-width: 64rem) {
-  .menu-container {
-    padding: 0.9375rem; /* 15px */
+/* Orta ekranlar (tabletler) için düzen */
+@media (max-width: 1199px) {
+  #search-bar {
+    width: 25rem; /* Arama çubuğu genişliğini küçült */
   }
-
-  .category-titles {
-    justify-content: space-between;
-    padding: 0.625rem; /* 10px */
-  }
-
   .menu-item {
-    width: calc(50% - 0.625rem); /* %50 genişlik - 10px */
+    width: 12rem; /* Menü öğesi genişliğini azalt */
+    height: auto; /* Yüksekliği otomatik ayarla */
+  }
+  .suggestions, #category-titles {
+    width: 25rem; /* Öneri listesi ve kategori başlıkları */
+  }
+}
+
+/* Küçük ekranlar (mobil) için düzen */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column; /* Başlık bölümünü dikey hizala */
+    padding: 1em;
+  }
+  
+  #search-bar {
+    width: 100%; /* Arama çubuğunu tam genişlik yap */
+    margin-bottom: 1rem; /* Altında boşluk bırak */
   }
 
-  .category-header h2 {
-    font-size: 1.375rem; /* 22px */
+  .suggestions, #category-titles {
+    width: 100%; /* Öneri listesi ve kategori başlıkları tam genişlik */
+    left: 0;
   }
 
-  .menu-item img,
-  .category-menu-item img {
-    max-width: 5.625rem; /* 90px */
+  .menu-container {
+    max-width: 100%; /* Menü kabını tam genişlik yap */
+  }
+  
+  .menu-item {
+    width: 100%; /* Menü öğelerini tam genişlik yap */
+    height: auto;
   }
 
-  .header img {
-    width: 5.625rem; /* 90px */
+  .suggestion-item img {
+    width: 4rem; /* Öneri resmi boyutunu küçült */
+    height: 4rem;
+  }
+}
+
+/* Daha küçük ekranlar (örneğin telefonlar) için tasarım */
+@media (max-width: 480px) {
+  .category-button {
+    font-size: 1rem; /* Buton yazı boyutunu küçült */
+    padding: 0.5rem; /* İç boşluğu azalt */
+  }
+  
+  .menu-item img {
+    width: 100%; /* Menü öğesi resmini tam genişlik yap */
+    height: auto;
+  }
+
+  .content-img img {
+    width: 100%; /* İçerik resmini tam genişlik yap */
+    height: auto;
   }
 }
