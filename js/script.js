@@ -54,11 +54,38 @@ function createCategoryHeader(category) {
 
 // Kategori butonunu oluşturma
 function createCategoryButton(category) {
+
+  let isMouseDown = false; // Fare basılı mı
+  let startX; // Başlangıç X koordinatı
+  let scrollLeft; // Başlangıç kaydırma değeri
+
   const categoryButton = document.createElement('button');
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
   categoryButton.addEventListener('click', () => scrollToCategory(category.category_name));
   categoryTitles.appendChild(categoryButton);
+
+  categoryTitles.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+    startX = e.pageX - categoryTitles.offsetLeft; // Fare basıldığında başlangıç pozisyonunu al
+    scrollLeft = categoryTitles.scrollLeft; // Başlangıç kaydırma değerini al
+  });
+
+  categoryTitles.addEventListener('mouseleave', () => {
+    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+  });
+
+  categoryTitles.addEventListener('mouseup', () => {
+    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+  });
+
+  categoryTitles.addEventListener('mousemove', (e) => {
+    if (!isMouseDown) return; // Eğer fare basılı değilse, işleme devam etme
+    e.preventDefault(); // Varsayılan kaydırmayı durdur
+    const x = e.pageX - categoryTitles.offsetLeft; // Şu anki X koordinatını al
+    const walk = (x - startX) * 2; // Kaydırma hızı
+    categoryTitles.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
+  });
 }
 
 // Menü öğelerini listeleme
@@ -108,12 +135,9 @@ function createMenuItem(item) {
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item'; 
   const fontSize = item.name.length > 20 ? '14px' : '18px';
-
   menuItem.innerHTML = `
-    <div class="content-img">
-      <img src="${item.image_url}" alt="${item.name}">
-    </div>
-    <h4>${item.name}</h4>
+    <img src="${item.image_url}" alt="${item.name}">
+    <h3 style="font-size: ${fontSize};">${item.name}</h3>
     <p>${item.price} ₺</p>
   `;
 
@@ -122,7 +146,7 @@ function createMenuItem(item) {
     showBottomSheet(item);
   });
 
-  return menuItem;
+  return menuItem;
 }
 function showBottomSheet(item) {
   const bottomSheet = document.getElementById('bottomSheet');
@@ -134,7 +158,7 @@ function showBottomSheet(item) {
 
   // İçeriği doldur
   itemName.textContent = item.name;
-  itemPrice.textContent = `${item.price} ₺`;
+  itemPrice.textContent =`${item.price} ₺`;
   itemDescription.textContent = item.description;
   itemImage.src = item.image_url;
 
@@ -195,8 +219,6 @@ window.addEventListener('pointerup', () => {
 
 // Overlay'e tıklandığında kapatma
 overlay.addEventListener('click', hideBottomSheet);
-
-
 // Kategorilere kaydırma fonksiyonu
 function scrollToCategory(categoryName) {
   const itemContainers = document.querySelectorAll('.item-container');
@@ -221,26 +243,26 @@ function filterItems() {
 
   if (input) {
     const filteredItems = allMenuItems.filter(item => item.name.toLowerCase().includes(input));
-
+    
     filteredItems.forEach(item => {
-      const suggestionDiv = document.createElement('div');
-      suggestionDiv.classList.add('suggestion-item');
+      const div = document.createElement('div');
+      div.classList.add('suggestion-item');
 
       // Resmi oluştur
-      const imgDiv = document.createElement('div'); // Yeni img div'i
       const img = document.createElement('img');
       img.src = item.image_url; // Her öğe için resim kaynağını atayın
       img.alt = item.name; // Erişilebilirlik için alt metin
-      imgDiv.appendChild(img); // Resmi img div'ine ekle
-      suggestionDiv.appendChild(imgDiv); // img div'ini öneri div'ine ekle
 
       // Metni oluştur
       const text = document.createTextNode(item.name);
-      suggestionDiv.appendChild(text); // Metni öneri div'ine ekle
-
+      
+      // Resmi ve metni div'e ekle
+      div.appendChild(img);
+      div.appendChild(text);
+      
       // Tıklama olayını ekle
-      suggestionDiv.onclick = () => selectItem(item.name);
-      suggestions.appendChild(suggestionDiv);
+      div.onclick = () => selectItem(item.name);
+      suggestions.appendChild(div);
     });
 
     suggestions.style.display = filteredItems.length ? 'block' : 'none';
@@ -248,7 +270,6 @@ function filterItems() {
     suggestions.style.display = 'none'; // Giriş boşsa öneri penceresini gizle
   }
 }
-
 
 
 // Seçilen öğeyi arama çubuğuna yaz ve öneri penceresini gizle

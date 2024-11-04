@@ -62,7 +62,7 @@ body {
   z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
   max-height: 15rem; /* Maksimum yükseklik */
   overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
-  width: 40rem; /* Arama çubuğunun genişliğiyle aynı */
+  width: 35rem; /* Arama çubuğunun genişliğiyle aynı */
   display: none; /* Başlangıçta gizli */
   top: 100%; /* Arama çubuğunun altına yerleştirin */
   left: 1.5rem; /* Arama çubuğunun sol kenarıyla hizalayın */
@@ -145,6 +145,32 @@ body {
 .category-title:hover {
   text-decoration: underline;
 }
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem; 
+}
+
+.category-header h3 {
+  font-size: 1.5rem; 
+  color: #666687;
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.category-header a {
+  color: #666687;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.category-header a:hover {
+  color: #FFB01D;
+  transition: .5s;
+}
+/* bıttınahhwr*/
 .bottom-sheet {
   position: fixed;
   bottom: 0;
@@ -173,34 +199,8 @@ body {
 }
 
 .overlay.active {
-  display: block; /* Görünür hale gelince göster */
+  display: block; /* Görünür hale gelince göster */
 }
-
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.25rem; 
-}
-
-.category-header h3 {
-  font-size: 1.5rem; 
-  color: #666687;
-  margin: 0;
-  margin-top: 1rem;
-}
-
-.category-header a {
-  color: #666687;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.category-header a:hover {
-  color: #FFB01D;
-  transition: .5s;
-}
-
 .item-container {
   display: flex;
   overflow-x: auto; /* İçerik taşarsa kaydırma sağlar */
