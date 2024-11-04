@@ -76,13 +76,25 @@ body {
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
+#category-titles {
+  display: flex; /* Flexbox kullanarak yan yana hizala */
+  overflow-x: auto; /* Taşma durumunda yatay kaydırma çubuğu göster */
+  white-space: nowrap; /* İçerik tek satırda kalsın */
+  margin-top: 20px; /* Üstten boşluk */
+  scrollbar-width: none; 
+}
+
+#category-titles::-webkit-scrollbar {
+  display: none; /* Webkit tabanlı tarayıcılarda kaydırma çubuğunu gizle */
+}
+
 .category-button {
   background-color: #fff;
   font-size: 1.5rem;
   border-radius: .9em;
-  padding: 1rem 1rem 1rem 1rem;
-  margin-right: 1rem;
-  margin-top: 1rem;
+  padding: 1rem;
+  margin-right: 1rem; /* Sağda boşluk bırak */
+  margin-top: 1rem; /* Yukarıda boşluk bırak */
   border: none;
   color: #666687;
 }
@@ -147,6 +159,9 @@ body {
   margin-top: 0.5rem;
   padding: 0.625rem 0;
   scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
+}
+.item-container::-webkit-scrollbar {
+  display: none; /* Webkit tabanlı tarayıcılarda kaydırma çubuğunu gizle */
 }
 /* yukarı kaydır butonu */ 
 #scroll-to-top {
