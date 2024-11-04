@@ -133,12 +133,11 @@ function renderMenuItems(category) {
 // Menü öğesini oluşturma
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
-  menuItem.className = 'menu-item'; 
-  const fontSize = item.name.length > 20 ? '14px' : '18px';
+  menuItem.className = 'menu-item';
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">
-    <h3 style="font-size: ${fontSize};">${item.name}</h3>
-    <p>${item.price} ₺</p>
+    <h3 class="item-name">${item.name}</h3>
+    <p class="item-price">${item.price} ₺</p>
   `;
 
   // Tıklama olayı: Ürün tıklandığında bottom sheet'i göster
@@ -146,8 +145,41 @@ function createMenuItem(item) {
     showBottomSheet(item);
   });
 
-  return menuItem;
+  // Dinamik font ayarlama
+  adjustFontSize(menuItem.querySelector('.item-name'));
+  adjustFontSize(menuItem.querySelector('.item-price'));
+
+  return menuItem;
 }
+
+function adjustFontSize(element) {
+  const maxFontSize = 16; // Maksimum font boyutu (px)
+  const minFontSize = 12; // Minimum font boyutu (px)
+  const lengthThreshold = 30; // Karakter uzunluğu eşiği
+
+  // Ekran genişliğine göre font boyutunu ölçekleme katsayısı (alt ve üst limitlerle)
+  let screenScale = window.innerWidth / 1440; // 1440 px genişlik referans alınır
+  screenScale = Math.max(0.8, Math.min(screenScale, 1)); // Ölçeği 0.8 ile 1 arasında tut
+
+  // Ölçeklenmiş maksimum ve minimum font boyutları
+  const scaledMaxFontSize = maxFontSize * screenScale;
+  const scaledMinFontSize = minFontSize * screenScale;
+
+  let fontSize = scaledMaxFontSize;
+  if (element.textContent.length > lengthThreshold) {
+    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.5;
+    fontSize = Math.max(fontSize, scaledMinFontSize); // Minimum font boyutuna kadar küçült
+  }
+
+  // Font boyutunu elemente uygula
+  element.style.fontSize = `${fontSize}px`;
+}
+
+// Ekran boyutu değiştikçe fontları yeniden ayarla
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.menu-item .item-name, .menu-item .item-price').forEach(adjustFontSize);
+});
+
 function showBottomSheet(item) {
   const bottomSheet = document.getElementById('bottomSheet');
   const overlay = document.getElementById('overlay');

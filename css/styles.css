@@ -39,12 +39,10 @@ body {
 /* Search bar */
 .search-container {
   position: relative;
-  margin-right: 3em;
 }
 
 #search-bar {
-  width: 100%; /* Arama çubuğunun genişliği */
-  max-width: 35rem;
+  width: 25rem; /* Arama çubuğunun genişliği */
   height: 2rem;
   padding: .5em 1.5em; /* İçerik için boşluk */
   border: 1px solid #ccc; /* Kenarlık */
@@ -65,7 +63,7 @@ body {
   z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
   max-height: 15rem; /* Maksimum yükseklik */
   overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
-  width: 100%; /* Arama çubuğunun genişliğiyle aynı */
+  width: 89%; /* Arama çubuğunun genişliğiyle aynı */
   display: none; /* Başlangıçta gizli */
   top: 100%; /* Arama çubuğunun altına yerleştirin */
   left: 1.5rem; /* Arama çubuğunun sol kenarıyla hizalayın */
@@ -361,6 +359,10 @@ body {
     justify-content: space-between;
     position: relative;
   }
+
+  .content-container {
+    padding: 0;
+  }
   
   .header-img {
     align-self: center;
@@ -371,61 +373,78 @@ body {
   .search-container {
     position: relative;
     align-self: center;
-    padding-bottom: .5em;
+    margin-right: 0;
   }
   
   #search-bar {
     height: 1.5rem;
+    max-width: 15rem;
+  }
+
+  .suggestions {
+    width: 83%; /* Arama çubuğunun genişliğiyle aynı */
+  }
+
+  .suggestion-item {
+    height: 4rem;
+    font-size: .8em;
+  }
+
+  .suggestion-item img {
+    width: 5rem; /* Resim genişliği */
+    height: 5rem; /* Resim yüksekliği */
+    margin-bottom: 0;
+  }
+
+  .item-container {
+    gap: 0;
   }
 
   .category-button {
     font-size: 1rem; /* Daha küçük yazı boyutu */
     padding: .75rem; /* Daha az boşluk */
     margin-top: 0;
+    margin-left: 1em;
+    margin-right: 0;
   }
 
   .menu-item {
+    margin-left: 1em;
+    margin-right: 0;
     width: 100%; /* Mobilde tam genişlik */
   }
 
   .category-header h3 {
-    font-size: 1.25rem; /* Daha küçük başlık boyutu */
+    margin-left: 1em;
+    font-size: 1rem; /* Daha küçük başlık boyutu */
+  }
+
+  .category-header a {
+    margin-right: 1em;
+    font-size: .75rem;
   }
 
   .menu-item img {
-    height: 5rem; /* Resim boyutunu küçült */
-    width: 5rem;
-    margin: .5em .5em;
+    height: 6rem; /* Resim boyutunu küçült */
+    width: 6rem;
   }
 
   .menu-item {
     max-width: 7rem; 
-    height: 10rem; /* Yükseklik sabit */
-    background-color: #fff;
-    border-radius: 1.5rem; 
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 0.625rem;
-    transition: transform 0.2s;
-    flex-shrink: 0; /* Boyutların değişmemesi için */
+    height: 10rem;
+    border-radius: 1rem; 
   }
-  
-  .menu-item:hover {
-    transform: scale(1.05);
-  }
-  
-  .menu-item h3 {
-    font-size: .75rem; 
-    color: #32324D;
-    max-height: 1rem;
-    padding: 0.1rem .1rem .1rem .1rem; 
-    margin: 0;
+
+  .menu-item h3{
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    height: .5em;
+    max-height: .5em;
   }
   
   .menu-item p {
-    font-size: 1rem; 
-    color: #f57c00;
-    font-weight: bold;
+    margin-bottom: 0;
   }
 
   #scroll-to-top {
@@ -438,5 +457,91 @@ body {
 @media (min-width: 601px) and (max-width: 1024px) {
   .menu-item {
     width: calc(50% - 1.25rem); /* Tabletlerde yarım genişlik */
+  }
+
+  .content-container {
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: 2em;
+  }
+  
+  /* Search bar */
+  .search-container {
+    position: relative;
+    align-self: center;
+    margin-right: 0;
+  }
+  
+  #search-bar {
+    height: 1.5rem;
+    max-width: 15rem;
+  }
+
+  .suggestions {
+    width: 83%; /* Arama çubuğunun genişliğiyle aynı */
+  }
+
+  .suggestion-item {
+    height: 5rem;
+    font-size: .9em;
+  }
+
+  .suggestion-item img {
+    width: 5rem; /* Resim genişliği */
+    height: 5rem; /* Resim yüksekliği */
+    margin-bottom: 0;
+  }
+
+  .item-container {
+    gap: 0;
+  }
+
+  #category-titles {
+    margin-top: 0;
+  }
+
+  .category-button {
+    font-size: 1.25rem; /* Daha küçük yazı boyutu */
+    padding: 1rem; /* Daha az boşluk */
+    margin-top: 0;
+    margin-left: 1em;
+    margin-right: 0;
+  }
+
+  .menu-item {
+    margin-left: 1.25em;
+    margin-right: 0;
+    width: 10rem; /* Mobilde tam genişlik */
+    height: 13rem;
+    border-radius: 1rem; 
+  }
+
+  .category-header h3 {
+    margin-left: 1.25em;
+    font-size: 1.25rem; /* Daha küçük başlık boyutu */
+  }
+
+  .category-header a {
+    margin-right: 1em;
+    font-size: 1rem;
+  }
+
+  .menu-item img {
+    height: 9rem; /* Resim boyutunu küçült */
+    width: 9rem;
+  }
+
+  .menu-item h3{
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    height: .5em;
+    max-height: .5em;
+  }
+  
+  .menu-item p {
+    margin-bottom: 0;
   }
 }
