@@ -108,14 +108,94 @@ function createMenuItem(item) {
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item'; 
   const fontSize = item.name.length > 20 ? '14px' : '18px';
+
   menuItem.innerHTML = `
-    <img src="${item.image_url}" alt="${item.name}">
-    <h3 style="font-size: ${fontSize};">${item.name}</h3>
+    <div class="content-img">
+      <img src="${item.image_url}" alt="${item.name}">
+    </div>
+    <h4>${item.name}</h4>
     <p>${item.price} ₺</p>
   `;
 
+  // Tıklama olayı: Ürün tıklandığında bottom sheet'i göster
+  menuItem.addEventListener('click', () => {
+    showBottomSheet(item);
+  });
+
   return menuItem;
 }
+function showBottomSheet(item) {
+  const bottomSheet = document.getElementById('bottomSheet');
+  const overlay = document.getElementById('overlay');
+  const itemName = document.getElementById('itemName');
+  const itemPrice = document.getElementById('itemPrice');
+  const itemDescription = document.getElementById('itemDescription');
+  const itemImage = document.getElementById('itemImage');
+
+  // İçeriği doldur
+  itemName.textContent = item.name;
+  itemPrice.textContent = `${item.price} ₺`;
+  itemDescription.textContent = item.description;
+  itemImage.src = item.image_url;
+
+  // BottomSheet ve overlay'i görünür yap
+  bottomSheet.classList.add('active');
+  overlay.classList.add('active');
+  bottomSheet.style.transform = 'translateY(0)'; // Aşağı kaydır
+}
+
+function hideBottomSheet() {
+  const bottomSheet = document.getElementById('bottomSheet');
+  const overlay = document.getElementById('overlay');
+
+  // Aşağı kaydırmak için CSS'yi değiştir
+  bottomSheet.style.transform = 'translateY(100%)'; // Aşağı kaydır
+  setTimeout(() => {
+    // Aşağı kaydırma animasyonu bittikten sonra gizle
+    bottomSheet.classList.remove('active');
+    overlay.classList.remove('active');
+  }, 300); // Geçiş süresi ile aynı süre
+}
+
+
+// Kaydırma ve kapatma işlemleri
+const bottomSheet = document.getElementById('bottomSheet');
+const overlay = document.getElementById('overlay');
+let startY;
+let currentY;
+let isDragging = false;
+
+bottomSheet.addEventListener('pointerdown', (e) => {
+  isDragging = true;
+  startY = e.clientY;
+  bottomSheet.style.transition = 'none'; // Kaydırma sırasında geçişi kaldır
+});
+
+window.addEventListener('pointermove', (e) => {
+  if (!isDragging) return;
+  currentY = e.clientY;
+  const moveY = currentY - startY;
+  if (moveY > 0) {
+      bottomSheet.style.transform = `translateY(${moveY}px)`; // Aşağı kaydır
+  }
+});
+
+window.addEventListener('pointerup', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  bottomSheet.style.transition = 'transform 0.3s ease'; // Kaydırma tamamlandığında geçişi geri yükle
+
+  const moveY = currentY - startY;
+  if (moveY > 100) { // 100px'den fazla kaydırırsa kapat
+      hideBottomSheet();
+  } else {
+      bottomSheet.style.transform = 'translateY(0)'; // Yeniden aç
+  }
+});
+
+// Overlay'e tıklandığında kapatma
+overlay.addEventListener('click', hideBottomSheet);
+
 
 // Kategorilere kaydırma fonksiyonu
 function scrollToCategory(categoryName) {
@@ -141,26 +221,26 @@ function filterItems() {
 
   if (input) {
     const filteredItems = allMenuItems.filter(item => item.name.toLowerCase().includes(input));
-    
+
     filteredItems.forEach(item => {
-      const div = document.createElement('div');
-      div.classList.add('suggestion-item');
+      const suggestionDiv = document.createElement('div');
+      suggestionDiv.classList.add('suggestion-item');
 
       // Resmi oluştur
+      const imgDiv = document.createElement('div'); // Yeni img div'i
       const img = document.createElement('img');
       img.src = item.image_url; // Her öğe için resim kaynağını atayın
       img.alt = item.name; // Erişilebilirlik için alt metin
+      imgDiv.appendChild(img); // Resmi img div'ine ekle
+      suggestionDiv.appendChild(imgDiv); // img div'ini öneri div'ine ekle
 
       // Metni oluştur
       const text = document.createTextNode(item.name);
-      
-      // Resmi ve metni div'e ekle
-      div.appendChild(img);
-      div.appendChild(text);
-      
+      suggestionDiv.appendChild(text); // Metni öneri div'ine ekle
+
       // Tıklama olayını ekle
-      div.onclick = () => selectItem(item.name);
-      suggestions.appendChild(div);
+      suggestionDiv.onclick = () => selectItem(item.name);
+      suggestions.appendChild(suggestionDiv);
     });
 
     suggestions.style.display = filteredItems.length ? 'block' : 'none';
@@ -168,6 +248,7 @@ function filterItems() {
     suggestions.style.display = 'none'; // Giriş boşsa öneri penceresini gizle
   }
 }
+
 
 
 // Seçilen öğeyi arama çubuğuna yaz ve öneri penceresini gizle

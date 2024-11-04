@@ -62,7 +62,7 @@ body {
   z-index: 1000; /* Diğer içeriklerin üzerinde görünmesi için */
   max-height: 15rem; /* Maksimum yükseklik */
   overflow-y: auto; /* Taşma durumunda kaydırma çubuğu */
-  width: 35rem; /* Arama çubuğunun genişliğiyle aynı */
+  width: 40rem; /* Arama çubuğunun genişliğiyle aynı */
   display: none; /* Başlangıçta gizli */
   top: 100%; /* Arama çubuğunun altına yerleştirin */
   left: 1.5rem; /* Arama çubuğunun sol kenarıyla hizalayın */
@@ -144,6 +144,36 @@ body {
 
 .category-title:hover {
   text-decoration: underline;
+}
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(100%); /* Başlangıçta gizli */
+  transition: transform 0.3s ease; /* Geçiş animasyonu */
+  z-index: 1000; /* Overlay üstünde görünmesi için */
+}
+
+.bottom-sheet.active {
+  transform: translateY(0); /* Görünür hale gelince yukarı kaydır */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; /* Başlangıçta gizli */
+  z-index: 999; /* Bottom sheet'in altında görünmesi için */
+}
+
+.overlay.active {
+  display: block; /* Görünür hale gelince göster */
 }
 
 .category-header {
