@@ -11,16 +11,36 @@
         <img src="../img/mitts_logo.png" alt="Logo">
         <div class="search-container">
             <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
-            <div id="suggestions" class="suggestions"></div> <!-- Öneri penceresi -->
+            <div id="suggestions" class="suggestions">
+                <div id="suggestion-img" class="suggestion-img"></div>
+            </div>
         </div>
     </div>
     <div id="menu-container">
         <div id="category-titles"></div>
     </div>
+    <!-- Bottom Sheet -->
+    <div id="overlay" class="overlay"></div>
+    <div id="bottomSheet" class="bottom-sheet">
+        <div class="bottom-sheet-content">
+            <div class="content-img">
+                <img id="itemImage" src="" alt="Item Image" />
+            </div>
+            <div class="content-desc">
+                <h3 id="itemName"></h3>
+                <p id="itemPrice"></p>
+                <p id="itemDescription"></p>
+            </div>
+        </div>
+    </div>
+
     <button id="scroll-to-top" style="display: none;">Yukarı Çık</button>
 
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    
+    <!-- JavaScript dosyalarınızı burada yükleyin -->
     <script src="../js/script.js"></script>
+  
 </body>
 </html>
