@@ -85,7 +85,7 @@ function createCategoryButton(category) {
     const x = e.pageX - categoryTitles.offsetLeft; // Şu anki X koordinatını al
     const walk = (x - startX) * 2; // Kaydırma hızı
     categoryTitles.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
-  });
+  });
 }
 
 // Menü öğelerini listeleme
