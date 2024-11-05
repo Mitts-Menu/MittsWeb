@@ -186,7 +186,11 @@ body {
   max-width: 1200px;
   bottom: 0;
   left: 0;
+  overflow-y: auto; /* İçeriğin kaydırılabilir olmasını sağlar */
+  -webkit-overflow-scrolling: touch; /* Mobilde yumuşak kaydırma sağlar */
   right: 0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   margin: 0 auto;
   background: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
@@ -278,6 +282,7 @@ body {
 
 .menu-item p {
   font-size: 1rem; 
+  margin-top: auto; 
   color: #f57c00;
   font-weight: bold;
 }
@@ -388,10 +393,6 @@ body {
     width: 100%; /* Mobilde tam genişlik */
   }
 
-  .category-header h3 {
-    font-size: 1.25rem; /* Daha küçük başlık boyutu */
-  }
-
   .menu-item img {
     height: 5rem; /* Resim boyutunu küçült */
     width: 5rem;
@@ -414,19 +415,6 @@ body {
     transform: scale(1.05);
   }
   
-  .menu-item h3 {
-    font-size: .75rem; 
-    color: #32324D;
-    max-height: 1rem;
-    padding: 0.1rem .1rem .1rem .1rem; 
-    margin: 0;
-  }
-  
-  .menu-item p {
-    font-size: 1rem; 
-    color: #f57c00;
-    font-weight: bold;
-  }
 
   #scroll-to-top {
     bottom: 15px; /* Mobilde yukarı kaydır butonunun konumu */

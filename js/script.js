@@ -7,7 +7,7 @@ const firebaseConfig = {
   storageBucket: "mitts-menu.appspot.com",
   messagingSenderId: "1023674735399",
   appId: "1:1023674735399:web:5bfbd8c6f3fa4f44e0e702",
-  measurementId: "G-FY4717JPP5"
+  measurementId: "G-FY4717JPP5" 
 };
 
 // Firebase başlatma
@@ -89,16 +89,28 @@ function createCategoryButton(category) {
 }
 
 // Menü öğelerini listeleme
+// Menü öğelerini listeleme
 function renderMenuItems(category) {
   const itemContainer = document.createElement('div');
   itemContainer.className = 'item-container';
   itemContainer.setAttribute('data-category', category.category_name);
 
-  category.items.forEach(item => {
+  // Sadece is_active: true olan öğeleri filtrele
+  const activeItems = category.items.filter(item => item.is_active === true);
+
+  // Aktif öğeleri render et
+  activeItems.forEach(item => {
     const menuItem = createMenuItem(item);
     itemContainer.appendChild(menuItem);
-    allMenuItems.push(item); // Tüm menü öğelerini diziye ekle
+    allMenuItems.push(item); // Aktif menü öğelerini diziye ekle
   });
+
+  // Eğer aktif öğe yoksa, bir mesaj göster
+  if (activeItems.length === 0) {
+    const noItemsMessage = document.createElement('div');
+    noItemsMessage.textContent = "Bu kategoride gösterilecek öğe yok.";
+    itemContainer.appendChild(noItemsMessage);
+  }
 
   menuContainer.appendChild(itemContainer);
 
@@ -130,15 +142,14 @@ function renderMenuItems(category) {
   });
 }
 
-// Menü öğesini oluşturma
+
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
-  menuItem.className = 'menu-item'; 
-  const fontSize = item.name.length > 20 ? '14px' : '18px';
+  menuItem.className = 'menu-item';
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">
-    <h3 style="font-size: ${fontSize};">${item.name}</h3>
-    <p>${item.price} ₺</p>
+    <h3 class="item-name">${item.name}</h3>
+    <p class="item-price">${item.price} ₺</p>
   `;
 
   // Tıklama olayı: Ürün tıklandığında bottom sheet'i göster
@@ -146,8 +157,37 @@ function createMenuItem(item) {
     showBottomSheet(item);
   });
 
-  return menuItem;
+  // Dinamik font ayarlama
+  adjustFontSize(menuItem.querySelector('.item-name'));
+  adjustFontSize(menuItem.querySelector('.item-price'));
+
+  return menuItem;
 }
+
+function adjustFontSize(element) {
+  const maxFontSize = 16; // Maksimum font boyutu (px)
+  const minFontSize = 10; // Minimum font boyutu (px)
+  const lengthThreshold = 20; // Karakter uzunluğu eşiği
+
+  // Ekran genişliğine göre font boyutunu ölçekleme katsayısı
+  const screenScale = window.innerWidth / 1920; // 375 px genişlik referans alınır
+  const scaledMaxFontSize = maxFontSize * screenScale;
+  const scaledMinFontSize = minFontSize * screenScale;
+
+  let fontSize = scaledMaxFontSize;
+  if (element.textContent.length > lengthThreshold) {
+    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.5;
+    fontSize = Math.max(fontSize, scaledMinFontSize); // Minimum font boyutuna kadar küçült
+  }
+  element.style.fontSize = `${fontSize}px`;
+}
+
+// Ekran boyutu değiştikçe fontları yeniden ayarla
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.menu-item .item-name, .menu-item .item-price').forEach(adjustFontSize);
+});
+
+
 function showBottomSheet(item) {
   const bottomSheet = document.getElementById('bottomSheet');
   const overlay = document.getElementById('overlay');
@@ -166,6 +206,8 @@ function showBottomSheet(item) {
   bottomSheet.classList.add('active');
   overlay.classList.add('active');
   bottomSheet.style.transform = 'translateY(0)'; // Aşağı kaydır
+  document.body.style.overflow = 'hidden';
+
 }
 
 function hideBottomSheet() {
@@ -178,6 +220,8 @@ function hideBottomSheet() {
     // Aşağı kaydırma animasyonu bittikten sonra gizle
     bottomSheet.classList.remove('active');
     overlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+
   }, 300); // Geçiş süresi ile aynı süre
 }
 
