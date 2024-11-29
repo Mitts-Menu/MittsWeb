@@ -125,42 +125,56 @@ function updateCategoryTitles(categories) {
 
 // Kategori butonunu oluşturma
 function createCategoryButton(category) {
-  let isMouseDown = false; // Fare basılı mı
-  let startX; // Başlangıç X koordinatı
+  let isMouseDown = false; // Fare basılı mı?
+  let startX; // Fare başlangıç X koordinatı
   let scrollLeft; // Başlangıç kaydırma değeri
 
+  // Kategori butonu oluşturma
   const categoryButton = document.createElement('button');
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
 
-  // Butona tıklandığında kaydırma işlemi
+  // Kategori butonuna tıklandığında
   categoryButton.addEventListener('click', () => {
-    scrollToCategory(category.category_name); // Kategoriye kaydır
+    scrollToCategory(category.category_name);
+
+    // Tüm butonlardan 'active' sınıfını kaldır
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    // Tıklanan butona 'active' sınıfını ekle
+    categoryButton.classList.add('active');
   });
 
+  // Kategori butonunu ana kapsayıcıya ekle
   categoryTitles.appendChild(categoryButton);
 
+  // Fare basıldığında başlangıç konumlarını ayarlama
   categoryTitles.addEventListener('mousedown', (e) => {
     isMouseDown = true;
-    startX = e.pageX - categoryTitles.offsetLeft; // Fare basıldığında başlangıç pozisyonunu al
-    scrollLeft = categoryTitles.scrollLeft; // Başlangıç kaydırma değerini al
+    startX = e.pageX - categoryTitles.offsetLeft; // Basıldığında X pozisyonunu kaydet
+    scrollLeft = categoryTitles.scrollLeft; // Kaydırma pozisyonunu kaydet
   });
 
+  // Fare kapsayıcıdan çıkınca basılı durumu sıfırlama
   categoryTitles.addEventListener('mouseleave', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+    isMouseDown = false;
   });
 
+  // Fare bırakıldığında basılı durumu sıfırlama
   categoryTitles.addEventListener('mouseup', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+    isMouseDown = false;
   });
 
+  // Fare hareketi ile yatay kaydırmayı kontrol etme
   categoryTitles.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return; // Eğer fare basılı değilse, işleme devam etme
-    e.preventDefault(); // Varsayılan kaydırmayı durdur
-    const x = e.pageX - categoryTitles.offsetLeft; // Şu anki X koordinatını al
-    const walk = (x - startX) * 2; // Kaydırma hızı
-    categoryTitles.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
-  });
+    if (!isMouseDown) return; // Fare basılı değilse, çık
+    e.preventDefault(); // Varsayılan davranışı engelle
+    const x = e.pageX - categoryTitles.offsetLeft; // Mevcut X koordinatı
+    const walk = (x - startX) * 2; // Kaydırma hızı (2 ile çarparak daha hızlı kaydırma sağlanabilir)
+    categoryTitles.scrollLeft = scrollLeft - walk; // Kaydırma pozisyonunu güncelle
+  });
 }
 
 function scrollToCategory(categoryName) {

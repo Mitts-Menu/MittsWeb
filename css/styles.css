@@ -157,6 +157,12 @@ body {
   transition: .5s;
 }
 
+.category-button.active{
+  background-color: #FFB01D;
+  color: #fff;
+  transition: .5s;
+}
+
 .category-titles {
   display: flex;
   justify-content: space-around;
