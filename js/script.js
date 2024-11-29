@@ -43,7 +43,7 @@ $(document).ready(function() {
       }
 
       // Bayrak resmi yolunu al
-      var flagUrl = "../img/" + state.element.getAttribute("data-flag") + ".jpg"; 
+      var flagUrl = "../MittsWeb/img/" + state.element.getAttribute("data-flag") + ".jpg"; 
 
       // Bayrak ikonunu döndür
       var $state = $( 
@@ -57,7 +57,7 @@ $(document).ready(function() {
       }
 
       // Bayrak resmi yolunu al
-      var flagUrl = "../img/" + state.element.getAttribute("data-flag") + ".jpg"; 
+      var flagUrl = "../MittsWeb/img/" + state.element.getAttribute("data-flag") + ".jpg"; 
 
       // Bayrak ikonunu döndür
       var $state = $( 
@@ -110,7 +110,7 @@ function createCategoryHeader(category) {
   categoryHeader.className = 'category-header';
   categoryHeader.innerHTML = `
     <h3>${category.category_name}</h3>
-    <a href="category.html?category=${encodeURIComponent(category.category_name)}">${languageTexts[selectedLanguage].viewAll}</a>
+    <a href="../MittsWeb/html/category.html?category=${encodeURIComponent(category.category_name)}">${languageTexts[selectedLanguage].viewAll}</a>
   `;
   menuContainer.appendChild(categoryHeader);
 }
