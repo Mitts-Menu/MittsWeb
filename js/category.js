@@ -20,28 +20,47 @@ const categoryProductsContainer = document.getElementById('category-products-con
 // URL'den kategori bilgisini alma
 const urlParams = new URLSearchParams(window.location.search);
 const categoryName = urlParams.get('category');
+const currentLanguage = localStorage.getItem("language") || "en"; // Varsayılan dil İngilizce
 
+// Kategori ürünlerini çekme
 function fetchCategoryProducts() {
   database.ref('menu').once('value').then(snapshot => {
-    snapshot.val().forEach(category => {
-      if (category.category_name === categoryName) {
-        category.items.forEach(item => {
-          const menuItem = document.createElement('div');
-          menuItem.className = 'category-content';
-          menuItem.innerHTML = `
-            <div class="content-img">
-              <img src="${item.image_url}" alt="${item.name}">
-            </div>
-            <div class="content-desc">
-              <h3>${item.name}</h3>
-              <p class="item-description">${item.description}</p>
-              <p class="item-price">${item.price} ₺</p>
-            </div>
-          `;
-          categoryProductsContainer.appendChild(menuItem);
-        });
+    const categories = snapshot.val(); // Verileri al
+    console.log("Tüm kategoriler:", categories); // Kategorileri kontrol et
+    if (categories && categories[currentLanguage]) { // Dilin mevcut olup olmadığını kontrol et
+      const categoryList = categories[currentLanguage]; // Seçilen dildeki kategorileri al
+      
+      // Seçilen kategoriye ait ürünleri bul
+      const selectedCategory = categoryList.find(cat => cat.category_name === categoryName);
+      console.log("Seçilen kategori:", selectedCategory); // Seçilen kategoriyi kontrol et
+      
+      if (selectedCategory) {
+        if (selectedCategory.items && Array.isArray(selectedCategory.items)) { // Kategori öğeleri var mı kontrol et
+          selectedCategory.items.forEach(item => {
+            // Menü öğelerini oluştur
+            const menuItem = document.createElement('div');
+            menuItem.className = 'category-content';
+            menuItem.innerHTML = `
+              <div class="content-img">
+                <img src="${item.image_url}" alt="${item.name}">
+              </div>
+              <div class="content-desc">
+                <h3>${item.name}</h3>
+                <p class="item-description">${item.description}</p>
+                <p class="item-price">${item.price} ₺</p>
+              </div>
+            `;
+            categoryProductsContainer.appendChild(menuItem); // Ekrana ekle
+          });
+        } else {
+          console.error('Kategori öğeleri bulunamadı:', selectedCategory.items);
+        }
+      } else {
+        console.error('Seçilen kategori bulunamadı:', categoryName);
       }
-    });
+    } else {
+      console.error('Kategori verisi veya dil bulunamadı');
+    }
   }).catch(error => {
     console.error("Veri çekme hatası:", error);
   });

@@ -4,42 +4,55 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../css/styles.css">
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
    <title>Menü</title>
 </head>
 <body>
     <div class="container">
+        
         <div class="header">
-            <img class="header-img" src="../img/mitts_logo.png" alt="Logo">
+            <a href="../html/index.htokml"><img class="header-img" src="../img/mitts_logo.png" alt="Logo"></a>
             <div class="search-container">
                 <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
-                <div id="suggestions" class="suggestions">
-                    <div id="suggestion-img" class="suggestion-img"></div>
+                <div class="language-selector">
+                    <select id="language-selector">
+                        <option value="tr" data-flag="tr_flag"></option>
+                        <option value="en" data-flag="en_flag"></option>
+                    </select>
                 </div>
             </div>
         </div>
+        <div id="category-titles"></div>
         <div class="content-container">
-        <div id="menu-container">
-            <div id="category-titles"></div>
+            <div id="menu-container">
+                
+                <div id="menu-items"></div>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Bottom Sheet -->
     <div id="overlay" class="overlay"></div>
     <div id="bottomSheet" class="bottom-sheet">
         <div class="bottom-sheet-content">
-            <div class="content-img">
+            <div class="bottomsheet-img">
                 <img id="itemImage" src="" alt="Item Image" />
             </div>
-            <div class="content-desc">
-                <h3 id="itemName"></h3>
-                <p id="itemPrice"></p>
+            <div class="bottomsheet-desc">
+                <div class="bottomsheet-name">
+                    <h3 id="itemName"></h3>
+                    <p id="itemPrice"></p>
+                </div>
                 <p id="itemDescription"></p>
             </div>
         </div>
     </div>
 
-    <button id="scroll-to-top" style="display: none;">Yukarı Çık</button>
+    <button id="scroll-to-top" style="display: none;">
+        <img src="../img/up-arrow.png" alt="icon" class="button-icon">
+    </button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script src="../js/script.js"></script>
