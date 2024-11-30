@@ -282,7 +282,6 @@ function adjustFontSize(element) {
   element.style.fontSize = `${fontSize}px`;
 }
 
-// Mevcut pointer event işlemlerini touch event’lere uyarladık
 function showBottomSheet(item) {
   const bottomSheet = document.getElementById('bottomSheet');
   const overlay = document.getElementById('overlay');
@@ -297,11 +296,14 @@ function showBottomSheet(item) {
   itemDescription.textContent = item.description;
   itemImage.src = item.image_url;
 
+  // BottomSheet ve overlay'i görünür yap
   bottomSheet.classList.add('active');
   overlay.classList.add('active');
+  
+  // Başlangıçta bottomSheet'i yarıya kadar aç
   bottomSheet.style.transform = 'translateY(0)';
   bottomSheet.style.height = '60%';
-
+  itemImage.style.transform = 'scale(1)';
   document.body.style.overflow = 'hidden';
 }
 
@@ -309,6 +311,7 @@ function hideBottomSheet() {
   const bottomSheet = document.getElementById('bottomSheet');
   const overlay = document.getElementById('overlay');
 
+  // Aşağı kaydırmak için CSS'yi değiştir
   bottomSheet.style.transform = 'translateY(100%)';
   setTimeout(() => {
     bottomSheet.classList.remove('active');
@@ -317,20 +320,22 @@ function hideBottomSheet() {
   }, 300);
 }
 
+// Kaydırma ve kapatma işlemleri
+const bottomSheet = document.getElementById('bottomSheet');
+const overlay = document.getElementById('overlay');
+const itemImage = document.getElementById('itemImage'); // Resim referansı
 let startY;
 let currentY;
 let isDragging = false;
 
-// Ortak başlangıç işlemi
-function startDrag(e) {
+bottomSheet.addEventListener('pointerdown', (e) => {
   isDragging = true;
   startY = e.clientY || e.touches[0].clientY;
   bottomSheet.style.transition = 'none';
-  itemImage.style.transition = 'none';
-}
+  itemImage.style.transition = 'none'; // Geçişi kaldır
+});
 
-// Ortak hareket işlemi
-function moveDrag(e) {
+window.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
   currentY = e.clientY || e.touches[0].clientY;
   const moveY = startY - currentY;
@@ -340,27 +345,35 @@ function moveDrag(e) {
     bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
     bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
 
+    // Resim zoom efekti (1x ile 1.5x arasında zoom)
     const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
     itemImage.style.transform = `scale(${zoomFactor})`;
 
+    // Resmin ortalanmasını sağla
     const offsetY = (zoomFactor - 1) * (itemImage.height / 2);
     itemImage.style.transformOrigin = `center ${offsetY}px`;
+    
+    // Yazılarla arasındaki boşluğu sabitle
+    itemName.style.marginTop = `${(zoomFactor - 1) * 20}px`;
+    itemPrice.style.marginTop = `${(zoomFactor - 1) * 10}px`;
+    itemDescription.style.marginTop = `${(zoomFactor - 1) * 30}px`;
+  } else {  // Aşağı kaydırma kontrolü
+    bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
-}
+});
 
-// Ortak bitiş işlemi
-function endDrag() {
+window.addEventListener('pointerup', () => {
   if (!isDragging) return;
   isDragging = false;
   bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
-  itemImage.style.transition = 'transform 0.3s ease';
+  itemImage.style.transition = 'transform 0.3s ease'; // Geçişi geri ekle
 
   const moveY = startY - currentY;
   const threshold = window.innerHeight * 0.3;
 
-  if (moveY < -150) {
-    hideBottomSheet();
-  } else if (moveY > threshold) {
+  if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
+    hideBottomSheet();  // Aşağı kaydırılırsa kapat
+  } else if (moveY > threshold) {  // Yukarı kaydırma kontrolü
     bottomSheet.style.transform = 'translateY(0)';
     bottomSheet.style.height = '100%';
     itemImage.style.transform = 'scale(1.5)';
@@ -369,17 +382,64 @@ function endDrag() {
     bottomSheet.style.height = '60%';
     itemImage.style.transform = 'scale(1)';
   }
-}
+});
 
-// Pointer eventleri
-bottomSheet.addEventListener('pointerdown', startDrag);
-window.addEventListener('pointermove', moveDrag);
-window.addEventListener('pointerup', endDrag);
+// Touch olaylarını da ekliyoruz
+bottomSheet.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  startY = e.touches[0].clientY;
+  bottomSheet.style.transition = 'none';
+  itemImage.style.transition = 'none'; // Geçişi kaldır
+});
 
-// Touch eventleri (dokunmatik cihazlar için)
-bottomSheet.addEventListener('touchstart', startDrag);
-window.addEventListener('touchmove', moveDrag);
-window.addEventListener('touchend', endDrag);
+window.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  currentY = e.touches[0].clientY;
+  const moveY = startY - currentY;
+
+  if (moveY > 0) {  // Yukarı kaydırma kontrolü
+    const limitedMoveY = Math.min(moveY, 400);
+    bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
+    bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
+
+    // Resim zoom efekti
+    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
+    itemImage.style.transform = `scale(${zoomFactor})`;
+
+    // Resmin ortalanmasını sağla
+    const offsetY = (zoomFactor - 1) * (itemImage.height / 2);
+    itemImage.style.transformOrigin = `center ${offsetY}px`;
+    
+    // Yazılarla arasındaki boşluğu sabitle
+    itemName.style.marginTop = `${(zoomFactor - 1) * 20}px`;
+    itemPrice.style.marginTop = `${(zoomFactor - 1) * 10}px`;
+    itemDescription.style.marginTop = `${(zoomFactor - 1) * 30}px`;
+  } else {  // Aşağı kaydırma kontrolü
+    bottomSheet.style.transform = `translateY(${-moveY}px)`;
+  }
+});
+
+window.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
+  itemImage.style.transition = 'transform 0.3s ease';
+
+  const moveY = startY - currentY;
+
+  if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
+    hideBottomSheet();  // Kapatma işlemi
+  } else if (moveY > window.innerHeight * 0.3) {  // Yukarı kaydırma kontrolü
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '100%';
+    itemImage.style.transform = 'scale(1.5)';
+  } else {
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '60%';
+    itemImage.style.transform = 'scale(1)';
+  }
+});
+
 
 // Overlay'e tıklandığında kapatma
 overlay.addEventListener('click', hideBottomSheet);
