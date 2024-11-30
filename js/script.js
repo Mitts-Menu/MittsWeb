@@ -303,7 +303,6 @@ function showBottomSheet(item) {
   // Başlangıçta bottomSheet'i yarıya kadar aç
   bottomSheet.style.transform = 'translateY(0)';
   bottomSheet.style.height = '60%';
-  itemImage.style.transform = 'scale(1)';
 
   document.body.style.overflow = 'hidden';
 }
@@ -324,7 +323,6 @@ function hideBottomSheet() {
 // Kaydırma ve kapatma işlemleri
 const bottomSheet = document.getElementById('bottomSheet');
 const overlay = document.getElementById('overlay');
-const itemImage = document.getElementById('itemImage'); // Resim referansı
 let startY;
 let currentY;
 let isDragging = false;
@@ -333,7 +331,6 @@ bottomSheet.addEventListener('pointerdown', (e) => {
   isDragging = true;
   startY = e.clientY || e.touches[0].clientY;
   bottomSheet.style.transition = 'none';
-  itemImage.style.transition = 'none'; // Geçişi kaldır
 });
 
 window.addEventListener('pointermove', (e) => {
@@ -346,10 +343,6 @@ window.addEventListener('pointermove', (e) => {
     bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
     bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
 
-    // Resim zoom efekti (1x ile 1.5x arasında zoom)
-    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
-    itemImage.style.transform = `scale(${zoomFactor})`;
-  
   } else {  // Aşağı kaydırma kontrolü
     bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
@@ -359,7 +352,6 @@ window.addEventListener('pointerup', () => {
   if (!isDragging) return;
   isDragging = false;
   bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
-  itemImage.style.transition = 'transform 0.3s ease'; // Geçişi geri ekle
 
   const moveY = startY - currentY;
   const threshold = window.innerHeight * 0.3;
@@ -369,11 +361,9 @@ window.addEventListener('pointerup', () => {
   } else if (moveY > threshold) {  // Yukarı kaydırma kontrolü
     bottomSheet.style.transform = 'translateY(0)';
     bottomSheet.style.height = '100%';
-    itemImage.style.transform = 'scale(1.5)';
   } else {
     bottomSheet.style.transform = 'translateY(0)';
     bottomSheet.style.height = '60%';
-    itemImage.style.transform = 'scale(1)';
   }
 });
 
@@ -382,7 +372,6 @@ bottomSheet.addEventListener('touchstart', (e) => {
   isDragging = true;
   startY = e.touches[0].clientY;
   bottomSheet.style.transition = 'none';
-  itemImage.style.transition = 'none'; // Geçişi kaldır
 });
 
 window.addEventListener('touchmove', (e) => {
@@ -395,9 +384,6 @@ window.addEventListener('touchmove', (e) => {
     bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
     bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
 
-    // Resim zoom efekti
-    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
-    itemImage.style.transform = `scale(${zoomFactor})`;
   } else {  // Aşağı kaydırma kontrolü
     bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
@@ -407,7 +393,6 @@ window.addEventListener('touchend', () => {
   if (!isDragging) return;
   isDragging = false;
   bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
-  itemImage.style.transition = 'transform 0.2s ease';
   const moveY = startY - currentY;
 
   if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
@@ -415,11 +400,9 @@ window.addEventListener('touchend', () => {
   } else if (moveY > window.innerHeight * 0.3) {  // Yukarı kaydırma kontrolü
     bottomSheet.style.transform = 'translateY(0)';
     bottomSheet.style.height = '100%';
-    itemImage.style.transform = 'scale(1.5)';
   } else {
     bottomSheet.style.transform = 'translateY(0)';
     bottomSheet.style.height = '60%';
-    itemImage.style.transform = 'scale(1)';
   }
 });
 
