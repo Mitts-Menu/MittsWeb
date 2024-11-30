@@ -110,7 +110,7 @@ function createCategoryHeader(category) {
   categoryHeader.className = 'category-header';
   categoryHeader.innerHTML = `
     <h3>${category.category_name}</h3>
-    <a href="../MittsWeb/html/category.html?category=${encodeURIComponent(category.category_name)}">${languageTexts[selectedLanguage].viewAll}</a>
+    <a href="../MittsWeb/html/category.html?category=${encodeURIComponent(category.category_name)}">${languageTexts[selectedLanguage].viewAll}<img class="arrow" src="../MittsWeb/img/arrow.png"></a>
   `;
   menuContainer.appendChild(categoryHeader);
 }
@@ -288,18 +288,21 @@ function showBottomSheet(item) {
   const itemName = document.getElementById('itemName');
   const itemPrice = document.getElementById('itemPrice');
   const itemDescription = document.getElementById('itemDescription');
-  const itemImage = document.getElementById('itemImage');
+  const itemImage = document.getElementById('itemImage'); // Resim referansı
 
   // İçeriği doldur
   itemName.textContent = item.name;
-  itemPrice.textContent =`${item.price} ₺`;
+  itemPrice.textContent = `${item.price} ₺`;
   itemDescription.textContent = item.description;
   itemImage.src = item.image_url;
 
   // BottomSheet ve overlay'i görünür yap
   bottomSheet.classList.add('active');
   overlay.classList.add('active');
-  bottomSheet.style.transform = 'translateY(0)'; // Aşağı kaydır
+  
+  // Başlangıçta bottomSheet'i yarıya kadar aç
+  bottomSheet.style.transform = 'translateY(0)';
+  bottomSheet.style.height = '60%';
 
   document.body.style.overflow = 'hidden';
 }
@@ -309,79 +312,134 @@ function hideBottomSheet() {
   const overlay = document.getElementById('overlay');
 
   // Aşağı kaydırmak için CSS'yi değiştir
-  bottomSheet.style.transform = 'translateY(100%)'; // Aşağı kaydır
+  bottomSheet.style.transform = 'translateY(100%)';
   setTimeout(() => {
-    // Aşağı kaydırma animasyonu bittikten sonra gizle
     bottomSheet.classList.remove('active');
     overlay.classList.remove('active');
     document.body.style.overflow = 'auto';
-  }, 300); // Geçiş süresi ile aynı süre
+  }, 300);
 }
-
 
 // Kaydırma ve kapatma işlemleri
 const bottomSheet = document.getElementById('bottomSheet');
 const overlay = document.getElementById('overlay');
+const itemImage = document.getElementById('itemImage'); // Resim referansı
 let startY;
 let currentY;
 let isDragging = false;
 
 bottomSheet.addEventListener('pointerdown', (e) => {
   isDragging = true;
-  startY = e.clientY || e.touches[0].clientY; // Fare veya parmak başlangıç koordinatı
-  bottomSheet.style.transition = 'none'; // Kaydırma sırasında geçişi kaldır
+  startY = e.clientY || e.touches[0].clientY;
+  bottomSheet.style.transition = 'none';
+  itemImage.style.transition = 'none'; // Geçişi kaldır
 });
 
 window.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
-  currentY = e.clientY || e.touches[0].clientY; // Fare veya parmak pozisyonu
-  const moveY = currentY - startY;
-  if (moveY > 0) {
-      bottomSheet.style.transform = `translateY(${moveY}px)`; // Aşağı kaydır
+  currentY = e.clientY || e.touches[0].clientY;
+  const moveY = startY - currentY;
+
+  if (moveY > 0) {  // Yukarı kaydırma kontrolü
+    const limitedMoveY = Math.min(moveY, 400);
+    bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
+    bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
+
+    // Resim zoom efekti (1x ile 1.5x arasında zoom)
+    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
+    itemImage.style.transform = `scale(${zoomFactor})`;
+
+    // Resmin ortalanmasını sağla
+    const offsetY = (zoomFactor - 1) * (itemImage.height / 2);
+    itemImage.style.transformOrigin = `center ${offsetY}px`;
+    
+    // Yazılarla arasındaki boşluğu sabitle
+    itemName.style.marginTop = `${(zoomFactor - 1) * 20}px`;
+    itemPrice.style.marginTop = `${(zoomFactor - 1) * 10}px`;
+    itemDescription.style.marginTop = `${(zoomFactor - 1) * 30}px`;
+  } else {  // Aşağı kaydırma kontrolü
+    bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
 });
 
 window.addEventListener('pointerup', () => {
   if (!isDragging) return;
   isDragging = false;
-  bottomSheet.style.transition = 'transform 0.3s ease'; // Kaydırma tamamlandığında geçişi geri yükle
+  bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
+  itemImage.style.transition = 'transform 0.3s ease'; // Geçişi geri ekle
 
-  const moveY = currentY - startY;
-  if (moveY > 100) { // 100px'den fazla kaydırırsa kapat
-      hideBottomSheet();
+  const moveY = startY - currentY;
+  const threshold = window.innerHeight * 0.3;
+
+  if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
+    hideBottomSheet();  // Aşağı kaydırılırsa kapat
+  } else if (moveY > threshold) {  // Yukarı kaydırma kontrolü
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '100%';
+    itemImage.style.transform = 'scale(1.5)';
   } else {
-      bottomSheet.style.transform = 'translateY(0)'; // Yeniden aç
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '60%';
+    itemImage.style.transform = 'scale(1)';
   }
 });
 
 // Touch olaylarını da ekliyoruz
 bottomSheet.addEventListener('touchstart', (e) => {
   isDragging = true;
-  startY = e.touches[0].clientY; // Parmakla başlangıç koordinatını al
-  bottomSheet.style.transition = 'none'; // Kaydırma sırasında geçişi kaldır
+  startY = e.touches[0].clientY;
+  bottomSheet.style.transition = 'none';
+  itemImage.style.transition = 'none'; // Geçişi kaldır
 });
 
 window.addEventListener('touchmove', (e) => {
   if (!isDragging) return;
-  currentY = e.touches[0].clientY; // Parmak pozisyonu
-  const moveY = currentY - startY;
-  if (moveY > 0) {
-      bottomSheet.style.transform = `translateY(${moveY}px)`; // Aşağı kaydır
+  currentY = e.touches[0].clientY;
+  const moveY = startY - currentY;
+
+  if (moveY > 0) {  // Yukarı kaydırma kontrolü
+    const limitedMoveY = Math.min(moveY, 400);
+    bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
+    bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
+
+    // Resim zoom efekti
+    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
+    itemImage.style.transform = `scale(${zoomFactor})`;
+
+    // Resmin ortalanmasını sağla
+    const offsetY = (zoomFactor - 1) * (itemImage.height / 2);
+    itemImage.style.transformOrigin = `center ${offsetY}px`;
+    
+    // Yazılarla arasındaki boşluğu sabitle
+    itemName.style.marginTop = `${(zoomFactor - 1) * 20}px`;
+    itemPrice.style.marginTop = `${(zoomFactor - 1) * 10}px`;
+    itemDescription.style.marginTop = `${(zoomFactor - 1) * 30}px`;
+  } else {  // Aşağı kaydırma kontrolü
+    bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
 });
 
 window.addEventListener('touchend', () => {
   if (!isDragging) return;
   isDragging = false;
-  bottomSheet.style.transition = 'transform 0.3s ease'; // Kaydırma tamamlandığında geçişi geri yükle
+  bottomSheet.style.transition = 'transform 0.3s ease, height 0.3s ease';
+  itemImage.style.transition = 'transform 0.3s ease';
 
-  const moveY = currentY - startY;
-  if (moveY > 100) { // 100px'den fazla kaydırırsa kapat
-      hideBottomSheet();
+  const moveY = startY - currentY;
+
+  if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
+    hideBottomSheet();  // Kapatma işlemi
+  } else if (moveY > window.innerHeight * 0.3) {  // Yukarı kaydırma kontrolü
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '100%';
+    itemImage.style.transform = 'scale(1.5)';
   } else {
-      bottomSheet.style.transform = 'translateY(0)'; // Yeniden aç
+    bottomSheet.style.transform = 'translateY(0)';
+    bottomSheet.style.height = '60%';
+    itemImage.style.transform = 'scale(1)';
   }
 });
+
 
 // Overlay'e tıklandığında kapatma
 overlay.addEventListener('click', hideBottomSheet);
@@ -456,4 +514,7 @@ document.getElementById('scroll-to-top').addEventListener('click', () => {
       top: 0,
       behavior: 'smooth' // Kaydırma animasyonu
   });
+document.querySelectorAll('.category-button').forEach(btn => {
+  btn.classList.remove('active');
+});
 });

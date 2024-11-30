@@ -194,7 +194,8 @@ body {
 }
 
 .category-header a {
-  color: #666687;
+  display: flex;
+  color: #FFB01D;
   text-decoration: none;
   font-weight: bold;
 }
@@ -204,6 +205,12 @@ body {
   transition: .5s;
 }
 
+.arrow{
+  padding-left: 0.3em;
+  align-self: center;
+  width: 16px;
+  height: 16px;
+}
 /* bottom sheet*/
 .bottom-sheet {
   position: fixed;
@@ -211,6 +218,7 @@ body {
   max-width: 1200px;
   bottom: 0;
   left: 0;
+  overflow: hidden; /* İçerik taşmasını engeller */
   right: 0;
   margin: 0 auto;
   background: white;
@@ -222,9 +230,11 @@ body {
 }
 
 .bottom-sheet-content {
+  padding: 2em;
   display: flex;
   flex-direction: column;
-  padding: 2em;
+    position: relative; /* İçeriklerin üzerine yazı eklenebilmesi için */
+
 }
 
 .bottom-sheet.active {
@@ -232,6 +242,8 @@ body {
 }
 
 .bottomsheet-img{
+  margin-bottom: 3.5em;
+  transition: transform 0.3s ease; /* Resim geçişi */
   align-items: center;
   align-self: center;
 }
@@ -246,11 +258,15 @@ body {
 }
 
 .bottomsheet-desc{
+  transition: margin-top 0.3s ease;
+  z-index: 1;
+  margin:0; 
   align-items: center;
   align-self: center;
 }
 
 .bottomsheet-name{
+  margin: 0;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -275,7 +291,6 @@ body {
   margin-bottom: 0;
   align-self: center;
 }
-
 .overlay {
   position: fixed;
   top: 0;

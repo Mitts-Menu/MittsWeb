@@ -20,7 +20,7 @@ const categoryProductsContainer = document.getElementById('category-products-con
 // URL'den kategori bilgisini alma
 const urlParams = new URLSearchParams(window.location.search);
 const categoryName = urlParams.get('category');
-const currentLanguage = localStorage.getItem("language") || "en"; // Varsayılan dil İngilizce
+const currentLanguage = localStorage.getItem("language") || "tr"; // Varsayılan dil İngilizce
 
 // Kategori ürünlerini çekme
 function fetchCategoryProducts() {
