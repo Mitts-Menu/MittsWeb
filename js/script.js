@@ -361,8 +361,8 @@ function dragging(e) {
 function dragStop() {
   if (!isDragging) return;
   isDragging = false;
-  bottomSheet.style.transition = 'transform 0.2s ease, height 0.2s ease';
-  itemImage.style.transition = 'transform 0.2s ease'; // Geçişi geri ekle
+  bottomSheet.style.transition = 'transform 0.5s ease, height 0.5s ease';
+  itemImage.style.transition = 'transform 0.5s ease'; // Geçişi geri ekle
 
   const moveY = startY - currentY;
   const threshold = window.innerHeight * 0.3;
