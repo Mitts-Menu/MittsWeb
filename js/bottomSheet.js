@@ -17,12 +17,14 @@ function showBottomSheet(item) {
     overlay.classList.add('active');
 
     // Başlangıçta bottomSheet'i yarıya kadar aç
-    bottomSheet.style.transform = 'translateY(0)';
-    bottomSheet.style.height = '60%';
-    itemImage.style.transform = 'scale(1)';
+    bottomSheet.style.transition = 'none';  // Geçişi kaldırıyoruz
+    bottomSheet.style.transform = 'translateY(100%)';
+    bottomSheet.offsetHeight;  // Reflow yaparak animasyonu başlatıyoruz
+    bottomSheet.style.transition = 'transform 0.5s ease';  // Geçişi geri ekliyoruz
+    bottomSheet.style.transform = 'translateY(0)'; // Yumuşak animasyon için
 
-    // Opaklık efekti ekleyelim
-    overlay.style.transition = 'opacity 0.3s ease';
+    itemImage.style.transform = 'scale(1)';
+    overlay.style.transition = 'opacity 0.3s ease'; // Overlay geçişi
     overlay.style.opacity = '0.5';
 
     document.body.style.overflow = 'hidden';
@@ -33,6 +35,7 @@ function hideBottomSheet() {
     const overlay = document.getElementById('overlay');
 
     // Aşağı kaydırmak için CSS'yi değiştir
+    bottomSheet.style.transition = 'transform 0.5s ease'; // Yumuşak geçiş
     bottomSheet.style.transform = 'translateY(100%)';
     overlay.style.opacity = '0';  // Overlay opaklık değişikliği
 
