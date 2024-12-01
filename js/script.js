@@ -329,14 +329,16 @@ let startY;
 let currentY;
 let isDragging = false;
 
-bottomSheet.addEventListener('pointerdown', (e) => {
+// Drag başlatma fonksiyonu
+function dragStart(e) {
   isDragging = true;
   startY = e.clientY || e.touches[0].clientY;
   bottomSheet.style.transition = 'none';
   itemImage.style.transition = 'none'; // Geçişi kaldır
-});
+}
 
-window.addEventListener('pointermove', (e) => {
+// Drag işlemi fonksiyonu
+function dragging(e) {
   if (!isDragging) return;
   currentY = e.clientY || e.touches[0].clientY;
   const moveY = startY - currentY;
@@ -353,9 +355,10 @@ window.addEventListener('pointermove', (e) => {
   } else {  // Aşağı kaydırma kontrolü
     bottomSheet.style.transform = `translateY(${-moveY}px)`;
   }
-});
+}
 
-window.addEventListener('pointerup', () => {
+// Drag bitirme fonksiyonu
+function dragStop() {
   if (!isDragging) return;
   isDragging = false;
   bottomSheet.style.transition = 'transform 0.2s ease, height 0.2s ease';
@@ -375,53 +378,16 @@ window.addEventListener('pointerup', () => {
     bottomSheet.style.height = '60%';
     itemImage.style.transform = 'scale(1)';
   }
-});
+}
 
-// Touch olaylarını da ekliyoruz
-bottomSheet.addEventListener('touchstart', (e) => {
-  isDragging = true;
-  startY = e.touches[0].clientY;
-  bottomSheet.style.transition = 'none';
-  itemImage.style.transition = 'none'; // Geçişi kaldır
-});
+// Ortak olay dinleyicileri
+bottomSheet.addEventListener('pointerdown', dragStart);
+window.addEventListener('pointermove', dragging);
+window.addEventListener('pointerup', dragStop);
 
-window.addEventListener('touchmove', (e) => {
-  if (!isDragging) return;
-  currentY = e.touches[0].clientY;
-  const moveY = startY - currentY;
-
-  if (moveY > 0) {  // Yukarı kaydırma kontrolü
-    const limitedMoveY = Math.min(moveY, 400);
-    bottomSheet.style.transform = `translateY(${limitedMoveY}px)`;
-    bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
-
-    // Resim zoom efekti
-    const zoomFactor = 1 + (limitedMoveY / 400) * 0.5;
-    itemImage.style.transform = `scale(${zoomFactor})`;
-  } else {  // Aşağı kaydırma kontrolü
-    bottomSheet.style.transform = `translateY(${-moveY}px)`;
-  }
-});
-
-window.addEventListener('touchend', () => {
-  if (!isDragging) return;
-  isDragging = false;
-  bottomSheet.style.transition = 'transform 0.2s ease, height 0.2s ease';
-  itemImage.style.transition = 'transform 0.2s ease';
-  const moveY = startY - currentY;
-
-  if (moveY < -150) {  // Aşağı kaydırma eşiği kontrolü
-    hideBottomSheet();  // Kapatma işlemi
-  } else if (moveY > window.innerHeight * 0.3) {  // Yukarı kaydırma kontrolü
-    bottomSheet.style.transform = 'translateY(0)';
-    bottomSheet.style.height = '100%';
-    itemImage.style.transform = 'scale(1.5)';
-  } else {
-    bottomSheet.style.transform = 'translateY(0)';
-    bottomSheet.style.height = '60%';
-    itemImage.style.transform = 'scale(1)';
-  }
-});
+bottomSheet.addEventListener('touchstart', dragStart);
+window.addEventListener('touchmove', dragging);
+window.addEventListener('touchend', dragStop);
 
 
 // Overlay'e tıklandığında kapatma
