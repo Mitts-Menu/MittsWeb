@@ -197,10 +197,13 @@ function renderMenuItems(category) {
   itemContainer.className = 'item-container';
   itemContainer.setAttribute('data-category', category.category_name);
 
+  // Kategorideki her öğe için is_active durumu kontrolü yapılacak
   category.items.forEach(item => {
-    const menuItem = createMenuItem(item);
-    itemContainer.appendChild(menuItem);
-    allMenuItems.push(item); // Tüm menü öğelerini diziye ekle
+    if (item.is_active === true) { // Eğer item aktifse
+      const menuItem = createMenuItem(item); // Aktif öğeyi render et
+      itemContainer.appendChild(menuItem);
+      allMenuItems.push(item); // Tüm aktif menü öğelerini diziye ekle
+    }
   });
 
   menuContainer.appendChild(itemContainer);
@@ -232,6 +235,7 @@ function renderMenuItems(category) {
     itemContainer.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
   });
 }
+
 
 // Menü öğesini oluşturma
 function createMenuItem(item) {
