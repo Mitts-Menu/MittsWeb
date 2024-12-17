@@ -6,25 +6,33 @@ function showBottomSheet(item) {
     const itemDescription = document.getElementById('itemDescription');
     const itemImage = document.getElementById('itemImage');
     
-    // Animasyonları optimize et
-    requestAnimationFrame(() => {
-        // İçeriği doldur
-        itemName.textContent = item.name;
-        itemPrice.textContent = `${item.price} ₺`;
-        itemDescription.textContent = item.description;
-        itemImage.src = item.image_url;
-        
-        // Hardware acceleration için transform kullan
-        bottomSheet.style.transform = 'translate3d(0, 0, 0)';
-        bottomSheet.style.height = '60%';
-        itemImage.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        
-        // BottomSheet ve overlay'i görünür yap
-        bottomSheet.classList.add('active');
-        overlay.classList.add('active');
-        
-        document.body.style.overflow = 'hidden';
-    });
+    // Önce resmi yükle, sonra bottomSheet'i göster
+    const img = new Image();
+    img.onload = () => {
+        requestAnimationFrame(() => {
+            // İçeriği doldur
+            itemName.textContent = item.name;
+            itemPrice.textContent = `${item.price} ₺`;
+            itemDescription.textContent = item.description;
+            
+            // Resmi optimize et
+            itemImage.style.willChange = 'transform';
+            itemImage.src = item.image_url;
+            
+            // Hardware acceleration için transform kullan
+            bottomSheet.style.willChange = 'transform, height';
+            bottomSheet.style.transform = 'translate3d(0, 0, 0)';
+            bottomSheet.style.height = '60%';
+            itemImage.style.transform = 'translate3d(0, 0, 0) scale(1)';
+            
+            // BottomSheet ve overlay'i görünür yap
+            bottomSheet.classList.add('active');
+            overlay.classList.add('active');
+            
+            document.body.style.overflow = 'hidden';
+        });
+    };
+    img.src = item.image_url;
 }
 
 function hideBottomSheet() {
@@ -66,13 +74,16 @@ function dragging(e) {
     currentY = e.clientY || e.touches[0].clientY;
     const moveY = startY - currentY;
     
+    // Performans için transform değerlerini hesapla
     requestAnimationFrame(() => {
         if (moveY > 0) {
             const limitedMoveY = Math.min(moveY, 400);
-            bottomSheet.style.transform = `translate3d(0, ${limitedMoveY}px, 0)`;
-            bottomSheet.style.height = `${60 + limitedMoveY / 5}%`;
+            const heightPercentage = 60 + limitedMoveY / 5;
+            const zoomFactor = 1 + (limitedMoveY / 400) * 0.5; // Zoom faktörünü azalttım
             
-            const zoomFactor = 1 + (limitedMoveY / 400) * 0.7;
+            // Daha az maliyetli transform
+            bottomSheet.style.transform = `translate3d(0, ${limitedMoveY}px, 0)`;
+            bottomSheet.style.height = `${heightPercentage}%`;
             itemImage.style.transform = `translate3d(0, 0, 0) scale(${zoomFactor})`;
         } else {
             bottomSheet.style.transform = `translate3d(0, ${-moveY}px, 0)`;
@@ -96,12 +107,18 @@ function dragStop() {
         } else if (moveY > threshold) {
             bottomSheet.style.transform = 'translate3d(0, 0, 0)';
             bottomSheet.style.height = '100%';
-            itemImage.style.transform = 'translate3d(0, 0, 0) scale(1.5)';
+            itemImage.style.transform = 'translate3d(0, 0, 0) scale(1.25)'; // Maksimum zoom değerini azalttım
         } else {
             bottomSheet.style.transform = 'translate3d(0, 0, 0)';
             bottomSheet.style.height = '60%';
             itemImage.style.transform = 'translate3d(0, 0, 0) scale(1)';
         }
+        
+        // Animasyon bittikten sonra willChange'i temizle
+        setTimeout(() => {
+            bottomSheet.style.willChange = 'auto';
+            itemImage.style.willChange = 'auto';
+        }, 300);
     });
 }
 
