@@ -766,6 +766,10 @@ body {
     padding: 0;
   }
 
+  .category-header {
+    margin-top: 0;
+  }
+
   .menu-icon {
     width: 25px;
     height: 25px;
@@ -979,5 +983,48 @@ body {
     font-size: 1.1rem;
     margin-bottom: 0;
     max-lines: 1;
+  }
+}
+
+/* Mobil ekran için header düzenlemeleri */
+@media (max-width: 600px) {
+  /* Ana sayfa header düzenlemeleri */
+  .header {
+    padding: 1em;
+    height: auto;
+    flex-direction: column;
+  }
+
+  /* Ana sayfa için header-right düzenlemesi */
+  .container > .header > .header-right {
+    width: 100%;
+    justify-content: center;
+    position: relative;
+    margin-top: 0;
+  }
+
+  /* Ana sayfa search bar düzenlemesi */
+  .container > .header > .header-right #search-bar {
+    height: 1.25rem;
+    width: 15rem;
+  }
+
+  /* Ana sayfa menu button düzenlemesi */
+  .container > .header > .header-right .menu-button {
+    position: absolute;
+    right: 0;
+    margin-left: 0;
+  }
+
+  /* Kategori sayfası header düzenlemesi - mevcut yapıyı koru */
+  .detail-header {
+    height: 2em;
+    padding: 1em 1em;
+  }
+
+  .category-detail-title {
+    font-size: 1.25em;
+    padding: 0;
+    text-align: center;
   }
 }
