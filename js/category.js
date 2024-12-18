@@ -22,6 +22,12 @@ const urlParams = new URLSearchParams(window.location.search);
 const categoryName = urlParams.get('category');
 const currentLanguage = localStorage.getItem("language") || "tr"; // Varsayılan dil İngilizce
 
+// Kategori başlığını güncelle
+const categoryTitle = document.querySelector('.category-detail-title');
+if (categoryTitle && categoryName) {
+    categoryTitle.textContent = categoryName;
+}
+
 // Kategori ürünlerini çekme
 function fetchCategoryProducts() {
   database.ref('menu').once('value').then(snapshot => {
@@ -50,6 +56,17 @@ function fetchCategoryProducts() {
                 <p class="item-price">${item.price} ₺</p>
               </div>
             `;
+
+            // Tıklama olayını ekleyelim
+            menuItem.addEventListener('click', () => {
+              showBottomSheet({
+                name: item.name,
+                price: item.price,
+                description: item.description,
+                image_url: item.image_url
+              });
+            });
+
             categoryProductsContainer.appendChild(menuItem); // Ekrana ekle
           });
         } else {
