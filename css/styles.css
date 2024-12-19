@@ -256,6 +256,7 @@ body {
   padding: 0.625rem; 
   border-radius: 0.5rem; 
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Category Titles için yeni stiller */

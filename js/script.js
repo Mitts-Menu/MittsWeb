@@ -141,67 +141,53 @@ function createCategoryButton(category) {
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
 
-  categoryButton.addEventListener('click', () => {
-    isUserScrolling = true;
+  // Click event listener for desktop and mobile
+  categoryButton.addEventListener('click', () => handleCategoryClick(categoryButton));
 
-    // Aktif sınıfı güncelle
-    document.querySelectorAll('.category-button').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    categoryButton.classList.add('active');
-
-    // İlgili içeriğe smooth scroll
-    const itemContainer = document.querySelector(`.item-container[data-category="${category.category_name}"]`);
-    if (itemContainer) {
-      const offset = 150;
-      const elementPosition = itemContainer.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-
-      // Butonu merkeze getir
-      categoryButton.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
-
-      // Kaydırma kontrolünü zamanlayıcı ile sıfırla
-      clearTimeout(scrollTimeoutt);
-      scrollTimeoutt = setTimeout(() => {
-        isUserScrolling = false;
-      }, 1000);
-    }
-  });
-
-  // Touch olayları için destek ekle
-  let touchStartX = 0;
-  let touchEndX = 0;
-
-  categoryTitles.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-  }, { passive: true });
-
-  categoryTitles.addEventListener('touchmove', (e) => {
-    touchEndX = e.touches[0].clientX;
-  }, { passive: true });
-
-  categoryTitles.addEventListener('touchend', () => {
-    const swipeDistance = touchEndX - touchStartX;
-    if (Math.abs(swipeDistance) > 50) {
-      categoryTitles.scrollBy({
-        left: -swipeDistance,
-        behavior: 'smooth'
-      });
-    }
-  });
+  // Touch event listeners for mobile devices
+  categoryButton.addEventListener('touchstart', (e) => handleCategoryClick(categoryButton), { passive: true });
 
   categoryTitles.appendChild(categoryButton);
 }
+function handleCategoryClick(categoryButton) {
+  isUserScrolling = true;
 
+  // Remove 'active' class from all category buttons
+  document.querySelectorAll('.category-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Add 'active' class to the clicked button
+  categoryButton.classList.add('active');
+
+  // Smooth scroll to the category
+  const categoryName = categoryButton.innerText;
+  const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);
+  
+  if (itemContainer) {
+    const offset = 150;
+    const elementPosition = itemContainer.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - offset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+
+    // Optionally center the button in the view
+    categoryButton.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
+
+    // Reset scroll timeout
+    clearTimeout(scrollTimeoutt);
+    scrollTimeoutt = setTimeout(() => {
+      isUserScrolling = false;
+    }, 1000);
+  }
+}
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return; // Kullanıcı manuel seçim yaptıysa işlemi atla
 
@@ -257,6 +243,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
+categoryTitles.appendChild(categoryButton);
 
   categoryTitles.addEventListener('mousedown', (e) => {
     isMouseDown = true;
