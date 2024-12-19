@@ -244,49 +244,18 @@ window.addEventListener('scroll', () => {
     const activeButton = Array.from(document.querySelectorAll('.category-button'))
       .find(btn => btn.innerText === categoryName);
 
-      if (activeButton) {
-        activeButton.classList.add('active');
-      
-        // Aktif kategoriyi daha akıcı kaydırmak için window.scrollTo kullanacağız
-        const offset = 150;
-        const elementPosition = activeButton.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - offset;
-      
-        // window.scrollTo ile daha kontrollü kaydırma işlemi yapıyoruz
-        smoothScrollTo(offsetPosition);
-      }
-  }
-});
+    if (activeButton) {
+      activeButton.classList.add('active');
 
-function smoothScrollTo(targetPosition) {
-  let startPosition = window.pageYOffset;
-  let distance = targetPosition - startPosition;
-  let startTime = null;
-
-  // Animasyon için zamanlayıcı
-  function animateScroll(currentTime) {
-    if (startTime === null) startTime = currentTime;
-    let timeElapsed = currentTime - startTime;
-    let run = easeInOutQuad(timeElapsed, startPosition, distance, 600); // 600ms animasyon süresi
-
-    window.scrollTo(0, run);
-
-    if (timeElapsed < 600) { // Animasyon süresi bitene kadar devam et
-      requestAnimationFrame(animateScroll);
+      // Kaydırma işlemi sırasında aktif kategoriyi yatay kaydırarak göster
+      activeButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center' // Kategoriyi yatayda ortalar
+      });
     }
   }
-
-  // Easing fonksiyonu (yavaş başlama ve bitiş)
-  function easeInOutQuad(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t + b;
-    t--;
-    return (-c / 2) * (t * (t - 2) - 1) + b;
-  }
-
-  requestAnimationFrame(animateScroll); // Animasyonu başlat
-}
-
+});
 
 categoryTitles.appendChild(categoryButton);
 
