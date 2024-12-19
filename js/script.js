@@ -144,31 +144,32 @@ function createCategoryButton(category) {
 
   // Click event listener for desktop and mobile
   categoryButton.addEventListener('click', (e) => {
-    if (!isTouching) {  // Only allow click if not in the middle of a touch move
+    if (!isTouching) {  // Eğer kaydırma işlemi yapılmıyorsa tıklama işlemi yapılabilir
       handleCategoryClick(categoryButton);
     }
   });
 
   // Touch event listeners for mobile devices
   categoryButton.addEventListener('touchstart', (e) => {
-    isTouching = true;  // Start touch event
+    isTouching = true;  // Kaydırma işlemi başlıyor
   }, { passive: true });
 
   categoryButton.addEventListener('touchend', (e) => {
-    isTouching = false;  // End touch event, enabling click again
+    isTouching = false;  // Kaydırma işlemi bitiyor, tıklama işlemi aktif
   });
 
   categoryTitles.appendChild(categoryButton);
 }
+
 function handleCategoryClick(categoryButton) {
   isUserScrolling = true;
 
-  // Remove 'active' class from all category buttons
+  // Diğer tüm kategori butonlarının aktifliğini kaldır
   document.querySelectorAll('.category-button').forEach(btn => {
     btn.classList.remove('active');
   });
 
-  // Add 'active' class to the clicked button
+  // Tıklanan kategori butonunu aktif yap
   categoryButton.classList.add('active');
 
   // Smooth scroll to the category
@@ -199,6 +200,7 @@ function handleCategoryClick(categoryButton) {
     }, 1000);
   }
 }
+
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return; // Kullanıcı manuel seçim yaptıysa işlemi atla
 
