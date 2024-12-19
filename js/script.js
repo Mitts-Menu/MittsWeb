@@ -257,6 +257,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
+categoryTitles.appendChild(categoryButton);
 
   categoryTitles.addEventListener('mousedown', (e) => {
     isMouseDown = true;
