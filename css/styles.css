@@ -229,43 +229,65 @@ body {
   overflow-x: auto;
 }
 
+/* Category Titles için yeni stiller */
 #category-titles {
   display: flex;
   overflow-x: auto;
   white-space: nowrap;
-  scrollbar-width: none; 
+  scrollbar-width: none;
   position: sticky;
-  top: 0; 
+  top: 0;
   z-index: 700;
-  padding: 10px 0;
-  align-items: center;
-  align-self: center;
-  justify-content: space-between;
+  padding: 15px 0;
   background-color: #F7F7F7;
-  padding-bottom: 1.5em;
-  padding-left: 2em;
-  padding-right: 2em;
-}
-
-#category-titles::-webkit-scrollbar {
-  display: none;
+  transition: all 0.3s ease;
+  scroll-behavior: smooth;
 }
 
 .category-button {
   background-color: #fff;
   font-size: 1.5rem;
-  border-radius: .9em;
-  padding: 1rem;
+  border-radius: 0.9em;
+  padding: 1rem 1.5rem;
   margin-right: 1rem;
   margin-top: 1rem;
   border: none;
   color: #666687;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.category-button:hover, .category-button.active {
+.category-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-button.active {
   background-color: #FFB01D;
   color: #fff;
-  transition: .5s;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 176, 29, 0.3);
+}
+
+.category-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.category-button:hover::after {
+  width: 80%;
+}
+
+.category-button.active::after {
+  width: 90%;
 }
 
 /* Menü Öğeleri */

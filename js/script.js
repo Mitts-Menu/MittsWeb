@@ -18,6 +18,9 @@ const categoryTitles = document.getElementById('category-titles');
 const searchBar = document.getElementById('search-bar');
 let allMenuItems = [];
 
+let isManualScroll = false;
+let scrollTimeout;
+let isButtonClick = false;
 
 const languageTexts = {
   tr: {
@@ -129,28 +132,112 @@ function updateCategoryTitles(categories) {
   });
 }
 
-function createCategoryButton(category) {
-  let isMouseDown = false;
-  let startX;
-  let scrollLeft;
+let isUserScrolling = false;
+let scrollTimeoutt;
 
+// createCategoryButton fonksiyonunu güncelle
+function createCategoryButton(category) {
   const categoryButton = document.createElement('button');
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
 
   categoryButton.addEventListener('click', () => {
-    scrollToCategory(category.category_name);
+    isUserScrolling = true;
 
+    // Aktif sınıfı güncelle
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    categoryButton.classList.add('active');
+
+    // İlgili içeriğe smooth scroll
+    const itemContainer = document.querySelector(`.item-container[data-category="${category.category_name}"]`);
+    if (itemContainer) {
+      const offset = 150;
+      const elementPosition = itemContainer.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+
+      // Butonu merkeze getir
+      categoryButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+
+      // Kaydırma kontrolünü zamanlayıcı ile sıfırla
+      clearTimeout(scrollTimeoutt);
+      scrollTimeoutt = setTimeout(() => {
+        isUserScrolling = false;
+      }, 1000);
+    }
+  });
+
+  // Touch olayları için destek ekle
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  categoryTitles.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  categoryTitles.addEventListener('touchmove', (e) => {
+    touchEndX = e.touches[0].clientX;
+  }, { passive: true });
+
+  categoryTitles.addEventListener('touchend', () => {
+    const swipeDistance = touchEndX - touchStartX;
+    if (Math.abs(swipeDistance) > 50) {
+      categoryTitles.scrollBy({
+        left: -swipeDistance,
+        behavior: 'smooth'
+      });
+    }
+  });
+
+  categoryTitles.appendChild(categoryButton);
+}
+
+// Ekran kaydırma olayını dinle
+window.addEventListener('scroll', () => {
+  if (isUserScrolling) return; // Kullanıcı manuel seçim yaptıysa işlemi atla
+
+  const offset = 150;
+  const categories = document.querySelectorAll('.item-container');
+  let closestCategory = null;
+  let minDistance = Infinity;
+
+  categories.forEach(category => {
+    const rect = category.getBoundingClientRect();
+    const distance = Math.abs(rect.top - offset);
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestCategory = category;
+    }
+  });
+
+  if (closestCategory) {
+    const categoryName = closestCategory.dataset.category;
+
+    // Aktif başlığı güncelle
     document.querySelectorAll('.category-button').forEach(btn => {
       btn.classList.remove('active');
     });
 
-    categoryButton.classList.add('active');
+    const activeButton = Array.from(document.querySelectorAll('.category-button'))
+      .find(btn => btn.innerText === categoryName);
 
-    setTimeout(() => {
-      categoryButton.classList.remove('active');
-    }, 100);
-  });
+    if (activeButton) {
+      activeButton.classList.add('active');
+    }
+  }
+});
+
 
   categoryTitles.appendChild(categoryButton);
 
@@ -175,7 +262,7 @@ function createCategoryButton(category) {
     const walk = (x - startX) * 2;
     categoryTitles.scrollLeft = scrollLeft - walk;
   });
-}
+
 
 function scrollToCategory(categoryName) {
   const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);
@@ -269,7 +356,7 @@ function adjustFontSize(element) {
 
   let fontSize = scaledMaxFontSize;
   if (element.textContent.length > lengthThreshold) {
-    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.5;
+    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.3;
     fontSize = Math.max(fontSize, scaledMinFontSize);
   }
 
@@ -333,6 +420,13 @@ window.addEventListener('scroll', () => {
     scrollToTopButton.style.display = 'none';
   }
 
+  if (isButtonClick) {
+    return;
+  }
+
+  clearTimeout(scrollTimeout);
+  isManualScroll = true;
+
   if (window.scrollY === 0) {
     document.querySelectorAll('.category-button').forEach(btn => {
       btn.classList.remove('active');
@@ -346,11 +440,18 @@ window.addEventListener('scroll', () => {
 
   const categoryHeaders = document.querySelectorAll('.category-header');
   const offset = 200;
-
   let currentCategory = null;
+  let maxVisibility = 0;
+
   categoryHeaders.forEach(header => {
     const rect = header.getBoundingClientRect();
-    if (rect.top <= offset) {
+    const visibility = Math.min(
+      Math.max(0, rect.bottom),
+      window.innerHeight
+    ) - Math.max(0, rect.top);
+    
+    if (visibility > maxVisibility) {
+      maxVisibility = visibility;
       currentCategory = header.querySelector('h3').textContent;
     }
   });
@@ -359,14 +460,26 @@ window.addEventListener('scroll', () => {
     const categoryButtons = document.querySelectorAll('.category-button');
     categoryButtons.forEach(button => {
       if (button.textContent === currentCategory) {
-        button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         document.querySelectorAll('.category-button').forEach(btn => {
           btn.classList.remove('active');
         });
         button.classList.add('active');
+        
+        if (isManualScroll) {
+          button.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
       }
     });
   }
+
+  scrollTimeout = setTimeout(() => {
+    isManualScroll = false;
+    isButtonClick = false;
+  }, 150);
 });
 
 document.getElementById('scroll-to-top').addEventListener('click', () => {
