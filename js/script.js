@@ -134,6 +134,7 @@ function updateCategoryTitles(categories) {
 
 let isUserScrolling = false;
 let scrollTimeoutt;
+let isTouching = false;
 
 // createCategoryButton fonksiyonunu güncelle
 function createCategoryButton(category) {
@@ -142,10 +143,20 @@ function createCategoryButton(category) {
   categoryButton.innerText = category.category_name;
 
   // Click event listener for desktop and mobile
-  categoryButton.addEventListener('click', () => handleCategoryClick(categoryButton));
+  categoryButton.addEventListener('click', (e) => {
+    if (!isTouching) {  // Only allow click if not in the middle of a touch move
+      handleCategoryClick(categoryButton);
+    }
+  });
 
   // Touch event listeners for mobile devices
-  categoryButton.addEventListener('touchstart', (e) => handleCategoryClick(categoryButton), { passive: true });
+  categoryButton.addEventListener('touchstart', (e) => {
+    isTouching = true;  // Start touch event
+  }, { passive: true });
+
+  categoryButton.addEventListener('touchend', (e) => {
+    isTouching = false;  // End touch event, enabling click again
+  });
 
   categoryTitles.appendChild(categoryButton);
 }
