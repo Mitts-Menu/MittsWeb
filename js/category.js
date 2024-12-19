@@ -45,7 +45,7 @@ function fetchCategoryProducts() {
               <div class="content-desc">
                 <h3>${item.name}</h3>
                 <p class="item-description">${item.description}</p>
-                <p class="item-price">${item.price} ₺</p>
+                <p class="item-price">₺${item.price}</p>
               </div>
             `;
 

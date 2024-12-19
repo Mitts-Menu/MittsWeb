@@ -216,6 +216,33 @@ body {
 .menu-link:hover {
   color: #FFB01D;
 }
+/* Hamburger Menu Icons */
+.menu-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;  /* İkon genişliğini ayarlayın */
+  height: 40px; /* İkon yüksekliğini ayarlayın */
+  transition: transform 0.3s ease; /* Hover efekti */
+}
+
+.icon img {
+  width: 100%; /* Görselin boyutunu icon boyutuna uydur */
+  height: 100%; /* Görselin boyutunu icon boyutuna uydur */
+  object-fit: contain; /* Görselin orijinal oranını koruyarak kutuya sığdır */
+}
+
+.icon:hover {
+  transform: scale(1.1); /* Hover'da biraz büyütme efekti */
+}
 
 /* Kategori Seçici */
 

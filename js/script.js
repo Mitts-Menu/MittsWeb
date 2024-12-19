@@ -512,3 +512,54 @@ document.getElementById('scroll-to-top').addEventListener('click', () => {
     allButton.classList.add('active');
   }
 });
+
+
+window.addEventListener('scroll', () => {
+  if (!isScrolling) {
+    isScrolling = true;
+    window.requestAnimationFrame(() => {
+      updateActiveCategory(); // Aktif kategoriyi güncelle
+      isScrolling = false;
+    });
+  }
+});
+
+function updateActiveCategory() {
+  const offset = 150;
+  const categories = document.querySelectorAll('.item-container');
+  let closestCategory = null;
+  let minDistance = Infinity;
+
+  categories.forEach(category => {
+    const rect = category.getBoundingClientRect();
+    const distance = Math.abs(rect.top - offset);
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestCategory = category;
+    }
+  });
+
+  if (closestCategory) {
+    const categoryName = closestCategory.dataset.category;
+
+    // Aktif başlığı güncelle
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    const activeButton = Array.from(document.querySelectorAll('.category-button'))
+      .find(btn => btn.innerText === categoryName);
+
+    if (activeButton) {
+      activeButton.classList.add('active');
+
+      // Kaydırma işlemi sırasında aktif kategoriyi yatay kaydırarak göster
+      activeButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center' // Kategoriyi yatayda ortalar
+      });
+    }
+  }
+}

@@ -10,7 +10,7 @@ function showBottomSheet(item) {
     img.onload = () => {
         requestAnimationFrame(() => {
             itemName.textContent = item.name;
-            itemPrice.textContent = `${item.price} ₺`;
+            itemPrice.textContent = `₺${item.price}`;
             itemDescription.textContent = item.description;
             
             itemImage.style.willChange = 'transform';
