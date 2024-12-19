@@ -1,4 +1,3 @@
-// Firebase ayarlarını buraya ekleyin
 const firebaseConfig = {
   apiKey: "AIzaSyCCI4I7yCCHEjhe4sOMnzP4j35S592aods",
   authDomain: "mitts-menu.firebaseapp.com",
@@ -10,40 +9,33 @@ const firebaseConfig = {
   measurementId: "G-FY4717JPP5"
 };
 
-// Firebase başlatma
 const app = firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// Kategori ürünlerini çekme
 const categoryProductsContainer = document.getElementById('category-products-container');
 
-// URL'den kategori bilgisini alma
 const urlParams = new URLSearchParams(window.location.search);
 const categoryName = urlParams.get('category');
-const currentLanguage = localStorage.getItem("language") || "tr"; // Varsayılan dil İngilizce
+const currentLanguage = localStorage.getItem("language") || "tr";
 
-// Kategori başlığını güncelle
 const categoryTitle = document.querySelector('.category-detail-title');
 if (categoryTitle && categoryName) {
     categoryTitle.textContent = categoryName;
 }
 
-// Kategori ürünlerini çekme
 function fetchCategoryProducts() {
   database.ref('menu').once('value').then(snapshot => {
-    const categories = snapshot.val(); // Verileri al
-    console.log("Tüm kategoriler:", categories); // Kategorileri kontrol et
-    if (categories && categories[currentLanguage]) { // Dilin mevcut olup olmadığını kontrol et
-      const categoryList = categories[currentLanguage]; // Seçilen dildeki kategorileri al
+    const categories = snapshot.val();
+    console.log("Tüm kategoriler:", categories);
+    if (categories && categories[currentLanguage]) {
+      const categoryList = categories[currentLanguage];
       
-      // Seçilen kategoriye ait ürünleri bul
       const selectedCategory = categoryList.find(cat => cat.category_name === categoryName);
-      console.log("Seçilen kategori:", selectedCategory); // Seçilen kategoriyi kontrol et
+      console.log("Seçilen kategori:", selectedCategory);
       
       if (selectedCategory) {
-        if (selectedCategory.items && Array.isArray(selectedCategory.items)) { // Kategori öğeleri var mı kontrol et
+        if (selectedCategory.items && Array.isArray(selectedCategory.items)) {
           selectedCategory.items.forEach(item => {
-            // Menü öğelerini oluştur
             const menuItem = document.createElement('div');
             menuItem.className = 'category-content';
             menuItem.innerHTML = `
@@ -57,7 +49,6 @@ function fetchCategoryProducts() {
               </div>
             `;
 
-            // Tıklama olayını ekleyelim
             menuItem.addEventListener('click', () => {
               showBottomSheet({
                 name: item.name,
@@ -67,7 +58,7 @@ function fetchCategoryProducts() {
               });
             });
 
-            categoryProductsContainer.appendChild(menuItem); // Ekrana ekle
+            categoryProductsContainer.appendChild(menuItem);
           });
         } else {
           console.error('Kategori öğeleri bulunamadı:', selectedCategory.items);
@@ -83,5 +74,4 @@ function fetchCategoryProducts() {
   });
 }
 
-// Kategori ürünlerini çek
 fetchCategoryProducts();

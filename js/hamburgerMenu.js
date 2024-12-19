@@ -3,19 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const closeButton = document.querySelector('.close-menu');
     
-    // Menüyü aç
     menuButton.addEventListener('click', () => {
         hamburgerMenu.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Sayfa kaydırmayı engelle
+        document.body.style.overflow = 'hidden';
     });
     
-    // Menüyü kapat
     closeButton.addEventListener('click', () => {
         hamburgerMenu.classList.remove('active');
-        document.body.style.overflow = 'auto'; // Sayfa kaydırmayı etkinleştir
+        document.body.style.overflow = 'auto';
     });
     
-    // Menü dışına tıklandığında kapat
     document.addEventListener('click', (e) => {
         if (!hamburgerMenu.contains(e.target) && !menuButton.contains(e.target)) {
             hamburgerMenu.classList.remove('active');
