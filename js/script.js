@@ -202,10 +202,22 @@ function createCategoryButton(category) {
   categoryTitles.appendChild(categoryButton);
 }
 
-// Ekran kaydırma olayını dinle
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return; // Kullanıcı manuel seçim yaptıysa işlemi atla
 
+  // Sayfa en üstte olduğunda "Tümü" butonunu aktif yap
+  if (window.scrollY === 0) {
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const allButton = document.querySelector('.category-button');
+    if (allButton) {
+      allButton.classList.add('active');
+    }
+    return;
+  }
+
+  // Kategorilerdeki en yakın olanı bul
   const offset = 150;
   const categories = document.querySelectorAll('.item-container');
   let closestCategory = null;
@@ -234,9 +246,18 @@ window.addEventListener('scroll', () => {
 
     if (activeButton) {
       activeButton.classList.add('active');
+
+      // Kaydırma işlemi sırasında aktif kategoriyi yatay kaydırarak göster
+      activeButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center' // Kategoriyi yatayda ortalar
+      });
     }
   }
 });
+
+
 
 
   categoryTitles.appendChild(categoryButton);
@@ -326,7 +347,7 @@ function createMenuItem(item) {
   menuItem.innerHTML = `
     <img src="${item.image_url}" alt="${item.name}">
     <h3 class="item-name">${item.name}</h3>
-    <p class="item-price">${item.price} ₺</p>
+    <p class="item-price">₺${item.price} </p>
   `;
 
   menuItem.addEventListener('click', () => {
@@ -356,7 +377,7 @@ function adjustFontSize(element) {
 
   let fontSize = scaledMaxFontSize;
   if (element.textContent.length > lengthThreshold) {
-    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.3;
+    fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.2;
     fontSize = Math.max(fontSize, scaledMinFontSize);
   }
 

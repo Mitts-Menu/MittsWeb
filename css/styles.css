@@ -221,6 +221,8 @@ body {
 
 .category-titles {
   display: flex;
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
   justify-content: space-around;
   margin: 0.625rem 0;
   background-color: #fff;
@@ -257,6 +259,9 @@ body {
   position: relative;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  scroll-snap-align: start; /* Kaydırırken her butonun başlangıç noktasında hizalanmasını sağlar */
+  flex-shrink: 0; /* Butonlar küçülmesin */
+
 }
 
 .category-button:hover {
