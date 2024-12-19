@@ -8,17 +8,55 @@
     </head>
     <body>
         <div class="container">
-            <div class="header">
-                <a href="../index.html"><img class="header-img" src="../img/mitts_logo.png" alt="Logo"></a>
+            <div class="detail-header">
+                <div class="back-button" onclick="window.history.back()">
+                    <img src="../img/back-arrow.png" alt="Geri" class="back-icon">
+                </div>
+                <h3 class="category-detail-title">kategori adı</h3>
+                <div class="header-right">
+                    <div class="menu-button">
+                        <img src="../img/menu-icon.png" alt="Menü" class="menu-icon">
+                    </div>
+                </div>
             </div>
             <div class="content-container">
                 <div id="category-products-container"></div>
+            </div>
+        </div>
+
+        <!-- Bottom Sheet -->
+        <div id="overlay" class="overlay"></div>
+        <div id="bottomSheet" class="bottom-sheet">
+            <div class="bottom-sheet-content">
+                <div class="bottomsheet-img" id="sa">
+                    <img id="itemImage" src="" alt="Item Image" />
+                </div>
+                <div class="bottomsheet-desc">
+                    <div class="bottomsheet-name">
+                        <h3 id="itemName"></h3>
+                        <p id="itemPrice"></p>
+                    </div>
+                    <p id="itemDescription"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hamburger menu -->
+        <div class="hamburger-menu">
+            <div class="menu-content">
+                <button class="close-menu">×</button>
+                <div class="menu-items">
+                    <a href="#" class="menu-link">Bize Ulaşın</a>
+                    <a href="#" class="menu-link">Sosyal Medya Hesabımız</a>
+                </div>
             </div>
         </div>
         
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
         <script src="../js/category.js"></script>
+        <script src="../js/bottomSheet.js"></script>
+        <script src="../js/hamburgerMenu.js"></script>
 
     </body>
 </html>

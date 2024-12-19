@@ -1,4 +1,3 @@
-// Firebase ayarları
 const firebaseConfig = {
   apiKey: "AIzaSyCCI4I7yCCHEjhe4sOMnzP4j35S592aods",
   authDomain: "mitts-menu.firebaseapp.com",
@@ -10,16 +9,14 @@ const firebaseConfig = {
   measurementId: "G-FY4717JPP5"
 };
 
-// Firebase başlatma
 const app = firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-let selectedLanguage = localStorage.getItem("language") || 'tr'; // Varsayılan dil Türkçe, localStorage'dan al
+let selectedLanguage = localStorage.getItem("language") || 'tr';
 
-// Menü verisini çekme ve listeleme fonksiyonu
 const menuContainer = document.getElementById('menu-items');
 const categoryTitles = document.getElementById('category-titles');
 const searchBar = document.getElementById('search-bar');
-let allMenuItems = []; // Tüm menü öğelerini tutacak dizi
+let allMenuItems = [];
 
 
 const languageTexts = {
@@ -30,22 +27,18 @@ const languageTexts = {
     viewAll: "View All"
   }
 };
-// Sayfa yüklendiğinde menüyü ve kategori başlıklarını çek
 fetchMenu(); 
 
-// Dil seçiciye Select2 uygulama
 $(document).ready(function() {
   $('#language-selector').select2({
-    minimumResultsForSearch: Infinity, // Arama alanını gizler
+    minimumResultsForSearch: Infinity,
     templateResult: function(state) {
       if (!state.id) {
-        return ''; // Eğer bir seçenek yoksa, sadece bayrağı göster
+        return '';
       }
 
-      // Bayrak resmi yolunu al
       var flagUrl = "../MittsWeb/img/" + state.element.getAttribute("data-flag") + ".jpg"; 
 
-      // Bayrak ikonunu döndür
       var $state = $( 
         '<span><img src="' + flagUrl + '" class="flag" style="width: 20px; height: 15px;" /></span>'
       );
@@ -53,13 +46,11 @@ $(document).ready(function() {
     },
     templateSelection: function(state) {
       if (!state.id) {
-        return ''; // Eğer bir seçenek yoksa, sadece bayrağı göster
+        return '';
       }
 
-      // Bayrak resmi yolunu al
       var flagUrl = "../MittsWeb/img/" + state.element.getAttribute("data-flag") + ".jpg"; 
 
-      // Bayrak ikonunu döndür
       var $state = $( 
         '<span><img src="' + flagUrl + '" class="flag" style="width: 20px; height: 15px;" /></span>'
       );
@@ -67,26 +58,24 @@ $(document).ready(function() {
     }
   });
 
-  // Başlangıç dilini seç
   $('#language-selector').val(selectedLanguage).trigger('change');
 
-  // Dil seçimi değiştiğinde menüyü yeniden çek
   $('#language-selector').on('change', function() {
     selectedLanguage = $(this).val();
-    localStorage.setItem("language", selectedLanguage);  // Dil bilgisini sakla
-    fetchMenu(); // Dil değiştiğinde menüyü yeniden çek
+    localStorage.setItem("language", selectedLanguage);
+    fetchMenu();
   });
 });
 
 
 function fetchMenu() {
-  console.log("Selected Language:", selectedLanguage); // Hangi dil seçildiğini kontrol et
+  console.log("Selected Language:", selectedLanguage);
   database.ref('menu').once('value')
     .then(snapshot => {
       const categories = snapshot.val();
       if (categories) {
         const currentCategories = Object.values(categories[selectedLanguage]);
-        console.log("Current Categories:", currentCategories); // Yüklenen kategorileri kontrol et
+        console.log("Current Categories:", currentCategories);
         updateCategoryTitles(currentCategories);
         menuContainer.innerHTML = '';
         allMenuItems = [];
@@ -98,13 +87,11 @@ function fetchMenu() {
     });
 }
 
-// Kategori render fonksiyonu
 function renderCategory(category) {
   createCategoryHeader(category);
   renderMenuItems(category);
 }
 
-// Kategori başlığını oluşturma
 function createCategoryHeader(category) {
   const categoryHeader = document.createElement('div');
   categoryHeader.className = 'category-header';
@@ -116,128 +103,136 @@ function createCategoryHeader(category) {
 }
 
 function updateCategoryTitles(categories) {
-  console.log('Updating category titles:', categories); // Başlıklar güncelleniyor mu kontrol et
-  categoryTitles.innerHTML = ''; // Önceki başlıkları temizle
+  console.log('Updating category titles:', categories);
+  categoryTitles.innerHTML = '';
+  
+  const allButton = document.createElement('button');
+  allButton.className = 'category-button active';
+  allButton.innerText = 'Tümü';
+  
+  allButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    allButton.classList.add('active');
+  });
+  
+  categoryTitles.appendChild(allButton);
+
   categories.forEach(category => {
-    createCategoryButton(category); // Yeni başlıkları oluştur
+    createCategoryButton(category);
   });
 }
 
-// Kategori butonunu oluşturma
 function createCategoryButton(category) {
-  let isMouseDown = false; // Fare basılı mı?
-  let startX; // Fare başlangıç X koordinatı
-  let scrollLeft; // Başlangıç kaydırma değeri
+  let isMouseDown = false;
+  let startX;
+  let scrollLeft;
 
-  // Kategori butonu oluşturma
   const categoryButton = document.createElement('button');
   categoryButton.className = 'category-button';
   categoryButton.innerText = category.category_name;
 
-  // Kategori butonuna tıklandığında
   categoryButton.addEventListener('click', () => {
     scrollToCategory(category.category_name);
 
-    // Tüm butonlardan 'active' sınıfını kaldır
     document.querySelectorAll('.category-button').forEach(btn => {
       btn.classList.remove('active');
     });
 
-    // Tıklanan butona 'active' sınıfını ekle
     categoryButton.classList.add('active');
+
+    setTimeout(() => {
+      categoryButton.classList.remove('active');
+    }, 100);
   });
 
-  // Kategori butonunu ana kapsayıcıya ekle
   categoryTitles.appendChild(categoryButton);
 
-  // Fare basıldığında başlangıç konumlarını ayarlama
   categoryTitles.addEventListener('mousedown', (e) => {
     isMouseDown = true;
-    startX = e.pageX - categoryTitles.offsetLeft; // Basıldığında X pozisyonunu kaydet
-    scrollLeft = categoryTitles.scrollLeft; // Kaydırma pozisyonunu kaydet
+    startX = e.pageX - categoryTitles.offsetLeft;
+    scrollLeft = categoryTitles.scrollLeft;
   });
 
-  // Fare kapsayıcıdan çıkınca basılı durumu sıfırlama
   categoryTitles.addEventListener('mouseleave', () => {
     isMouseDown = false;
   });
 
-  // Fare bırakıldığında basılı durumu sıfırlama
   categoryTitles.addEventListener('mouseup', () => {
     isMouseDown = false;
   });
 
-  // Fare hareketi ile yatay kaydırmayı kontrol etme
   categoryTitles.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return; // Fare basılı değilse, çık
-    e.preventDefault(); // Varsayılan davranışı engelle
-    const x = e.pageX - categoryTitles.offsetLeft; // Mevcut X koordinatı
-    const walk = (x - startX) * 2; // Kaydırma hızı (2 ile çarparak daha hızlı kaydırma sağlanabilir)
-    categoryTitles.scrollLeft = scrollLeft - walk; // Kaydırma pozisyonunu güncelle
-  });
+    if (!isMouseDown) return;
+    e.preventDefault();
+    const x = e.pageX - categoryTitles.offsetLeft;
+    const walk = (x - startX) * 2;
+    categoryTitles.scrollLeft = scrollLeft - walk;
+  });
 }
 
 function scrollToCategory(categoryName) {
   const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);
   if (itemContainer) {
-    const offset = 150; // Ekranın üst kısmında kaç piksel boşluk bırakmak istediğiniz
-    const elementPosition = itemContainer.getBoundingClientRect().top + window.pageYOffset; // Elemanın ekran üzerindeki konumu
-    const offsetPosition = elementPosition - offset; // Yeni kaydırma pozisyonu
+    const offset = 150;
+    const elementPosition = itemContainer.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - offset;
 
     window.scrollTo({
       top: offsetPosition,
-      behavior: 'smooth' // Kaydırma animasyonu
+      behavior: 'smooth'
     });
   }
 }
 
-// Menü öğelerini listeleme
 function renderMenuItems(category) {
   const itemContainer = document.createElement('div');
   itemContainer.className = 'item-container';
   itemContainer.setAttribute('data-category', category.category_name);
 
-  // Kategorideki her öğe için is_active durumu kontrolü yapılacak
   category.items.forEach(item => {
-    if (item.is_active === true) { // Eğer item aktifse
-      const menuItem = createMenuItem(item); // Aktif öğeyi render et
+    if (item.is_active === true) {
+      const menuItem = createMenuItem(item);
       itemContainer.appendChild(menuItem);
-      allMenuItems.push(item); // Tüm aktif menü öğelerini diziye ekle
+      allMenuItems.push(item);
     }
   });
 
   menuContainer.appendChild(itemContainer);
 
-  // Fare ile kaydırma işlemleri
-  let isMouseDown = false; // Fare basılı mı
-  let startX; // Başlangıç X koordinatı
-  let scrollLeft; // Başlangıç kaydırma değeri
+  let isMouseDown = false;
+  let startX;
+  let scrollLeft;
 
   itemContainer.addEventListener('mousedown', (e) => {
     isMouseDown = true;
-    startX = e.pageX - itemContainer.offsetLeft; // Fare basıldığında başlangıç pozisyonunu al
-    scrollLeft = itemContainer.scrollLeft; // Başlangıç kaydırma değerini al
+    startX = e.pageX - itemContainer.offsetLeft;
+    scrollLeft = itemContainer.scrollLeft;
   });
 
   itemContainer.addEventListener('mouseleave', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+    isMouseDown = false;
   });
 
   itemContainer.addEventListener('mouseup', () => {
-    isMouseDown = false; // Fare bırakıldığında durumu değiştir
+    isMouseDown = false;
   });
 
   itemContainer.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return; // Eğer fare basılı değilse, işleme devam etme
-    e.preventDefault(); // Varsayılan kaydırmayı durdur
-    const x = e.pageX - itemContainer.offsetLeft; // Şu anki X koordinatını al
-    const walk = (x - startX) * 2; // Kaydırma hızı
-    itemContainer.scrollLeft = scrollLeft - walk; // Yeni kaydırma değerini ayarla
+    if (!isMouseDown) return;
+    e.preventDefault();
+    const x = e.pageX - itemContainer.offsetLeft;
+    const walk = (x - startX) * 2;
+    itemContainer.scrollLeft = scrollLeft - walk;
   });
 }
 
-
-// Menü öğesini oluşturma
 function createMenuItem(item) {
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item';
@@ -247,12 +242,10 @@ function createMenuItem(item) {
     <p class="item-price">${item.price} ₺</p>
   `;
 
-  // Tıklama olayı: Ürün tıklandığında bottom sheet'i göster
   menuItem.addEventListener('click', () => {
     showBottomSheet(item);
   });
 
-  // Dinamik font ayarlama
   adjustFontSize(menuItem.querySelector('.item-name'));
   adjustFontSize(menuItem.querySelector('.item-price'));
 
@@ -264,102 +257,128 @@ window.addEventListener('resize', () => {
 });
 
 function adjustFontSize(element) {
-  const maxFontSize = 16; // Maksimum font boyutu (px)
-  const minFontSize = 12; // Minimum font boyutu (px)
-  const lengthThreshold = 30; // Karakter uzunluğu eşiği
+  const maxFontSize = 16;
+  const minFontSize = 12;
+  const lengthThreshold = 30;
 
-  // Ekran genişliğine göre font boyutunu ölçekleme katsayısı (alt ve üst limitlerle)
-  let screenScale = window.innerWidth / 1440; // 1440 px genişlik referans alınır
-  screenScale = Math.max(0.8, Math.min(screenScale, 1)); // Ölçeği 0.8 ile 1 arasında tut
+  let screenScale = window.innerWidth / 1440;
+  screenScale = Math.max(0.8, Math.min(screenScale, 1));
 
-  // Ölçeklenmiş maksimum ve minimum font boyutları
   const scaledMaxFontSize = maxFontSize * screenScale;
   const scaledMinFontSize = minFontSize * screenScale;
 
   let fontSize = scaledMaxFontSize;
   if (element.textContent.length > lengthThreshold) {
     fontSize = scaledMaxFontSize - (element.textContent.length - lengthThreshold) * 0.5;
-    fontSize = Math.max(fontSize, scaledMinFontSize); // Minimum font boyutuna kadar küçült
+    fontSize = Math.max(fontSize, scaledMinFontSize);
   }
 
-  // Font boyutunu elemente uygula
   element.style.fontSize = `${fontSize}px`;
 }
-menuItem.addEventListener('click', () => {
-  showBottomSheet(item);  // This function is now from bottomSheet.js
-});
+
 function filterItems() {
-  const searchTerm = searchBar.value.toLowerCase();  // Arama terimini al
-  const categoryHeaders = document.querySelectorAll('.category-header');  // Kategori başlıklarını al
+  const searchTerm = searchBar.value.toLowerCase();
+  const categoryHeaders = document.querySelectorAll('.category-header');
 
   categoryHeaders.forEach(header => {
-    const menuItems = header.nextElementSibling.querySelectorAll('.menu-item');  // Kategori başlığının altındaki menü öğelerini al
+    const menuItems = header.nextElementSibling.querySelectorAll('.menu-item');
     
-    let foundMatch = false;  // Eşleşme durumu kontrolü için flag
+    let foundMatch = false;
 
     menuItems.forEach(item => {
-      const itemName = item.querySelector('.item-name').textContent.toLowerCase();  // Menü öğesinin adını al
+      const itemName = item.querySelector('.item-name').textContent.toLowerCase();
 
-      // Eğer öğenin adı arama terimiyle eşleşiyorsa
       if (itemName.includes(searchTerm)) {
-        item.style.display = 'block';  // Menü öğesini göster
-        foundMatch = true;  // Eşleşme bulundu
+        item.style.display = 'block';
+        foundMatch = true;
       } else {
-        item.style.display = 'none';  // Menü öğesini gizle
+        item.style.display = 'none';
       }
     });
 
-    // Kategori başlığını yalnızca eşleşen ürün varsa göster
     if (foundMatch) {
-      header.style.display = 'flex';  // Kategori başlığını göster
+      header.style.display = 'flex';
     } else {
-      header.style.display = 'none';  // Kategori başlığını gizle
+      header.style.display = 'none';
     }
 
-    // Eğer kategori altında hiç öğe kalmadıysa, item-container'ı gizle
     const itemContainer = header.nextElementSibling;
     if (Array.from(itemContainer.querySelectorAll('.menu-item')).every(item => item.style.display === 'none')) {
-      itemContainer.style.display = 'none';  // item-container'ı gizle
+      itemContainer.style.display = 'none';
     } else {
-      itemContainer.style.display = 'flex';  // item-container'ı göster
+      itemContainer.style.display = 'flex';
     }
   });
 
-  // Eğer arama terimi boşsa, tüm öğeleri ve başlıkları tekrar göster
   if (searchTerm === '') {
     categoryHeaders.forEach(header => {
-      header.style.display = 'flex';  // Kategori başlıklarını göster
+      header.style.display = 'flex';
       const menuItems = header.nextElementSibling.querySelectorAll('.menu-item');
       menuItems.forEach(item => {
-        item.style.display = 'block';  // Menü öğelerini göster
+        item.style.display = 'block';
       });
       const itemContainer = header.nextElementSibling;
-      itemContainer.style.display = 'flex';  // item-container'ı göster
+      itemContainer.style.display = 'flex';
     });
   }
 }
 
-// Arama çubuğuna event listener ekle
 searchBar.addEventListener('input', filterItems);
 
-
-// Sayfa kaydırıldığında butonu göster
 window.addEventListener('scroll', () => {
   const scrollToTopButton = document.getElementById('scroll-to-top');
   if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-      scrollToTopButton.style.display = 'block'; // Butonu göster
+    scrollToTopButton.style.display = 'block';
   } else {
-      scrollToTopButton.style.display = 'none'; // Butonu gizle
+    scrollToTopButton.style.display = 'none';
+  }
+
+  if (window.scrollY === 0) {
+    document.querySelectorAll('.category-button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const allButton = document.querySelector('.category-button');
+    if (allButton) {
+      allButton.classList.add('active');
+    }
+    return;
+  }
+
+  const categoryHeaders = document.querySelectorAll('.category-header');
+  const offset = 200;
+
+  let currentCategory = null;
+  categoryHeaders.forEach(header => {
+    const rect = header.getBoundingClientRect();
+    if (rect.top <= offset) {
+      currentCategory = header.querySelector('h3').textContent;
+    }
+  });
+
+  if (currentCategory) {
+    const categoryButtons = document.querySelectorAll('.category-button');
+    categoryButtons.forEach(button => {
+      if (button.textContent === currentCategory) {
+        button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        document.querySelectorAll('.category-button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+      }
+    });
   }
 });
 
-// Butona tıklandığında sayfayı yukarı kaydır
 document.getElementById('scroll-to-top').addEventListener('click', () => {
   window.scrollTo({
-      top: 0,
-      behavior: 'smooth' // Kaydırma animasyonu
-  });
-document.querySelectorAll('.category-button').forEach(btn => {
-  btn.classList.remove('active');
-});
+    top: 0,
+    behavior: 'smooth'
+  });
+  document.querySelectorAll('.category-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  const allButton = document.querySelector('.category-button');
+  if (allButton) {
+    allButton.classList.add('active');
+  }
 });

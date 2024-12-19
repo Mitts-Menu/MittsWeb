@@ -11,17 +11,23 @@
     <div class="container">
         
         <div class="header">
-            <a href="../MittsWeb/index.html"><img class="header-img" src="../MittsWeb/img/mitts_logo.png" alt="Logo"></a>
-            <div class="search-container">
+            <a href="../MittsWeb/index.html">
+                <img class="header-img" src="../MittsWeb/img/mitts_logo.png" alt="Logo">
+            </a>
+            <div class="language-selector">
+                <select id="language-selector">
+                    <option value="tr" data-flag="tr_flag">TR</option>
+                    <option value="en" data-flag="en_flag">EN</option>
+                </select>
+            </div>
+            <div class="header-right">
                 <input type="text" id="search-bar" placeholder="Ara..." oninput="filterItems()" />
-                <div class="language-selector">
-                    <select id="language-selector">
-                        <option value="tr" data-flag="tr_flag"></option>
-                        <option value="en" data-flag="en_flag"></option>
-                    </select>
+                <div class="menu-button">
+                    <img src="../MittsWeb/img/menu-icon.png" alt="Menü" class="menu-icon">
                 </div>
             </div>
         </div>
+               
         <div id="category-titles"></div>
         <div class="content-container">
             <div id="menu-container">
@@ -48,6 +54,17 @@
         </div>
     </div>
 
+    <!-- Hamburger Manu -->
+    <div class="hamburger-menu">
+        <div class="menu-content">
+            <button class="close-menu">×</button>
+            <div class="menu-items">
+                <a href="#" class="menu-link">Bize Ulaşın</a>
+                <a href="#" class="menu-link">Sosyal Medya Hesabımız</a>
+            </div>
+        </div>
+    </div>
+
     <button id="scroll-to-top" style="display: none;">
         <img src="../MittsWeb/img/up-arrow.png" alt="icon" class="button-icon">
     </button>
@@ -57,5 +74,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script src="../MittsWeb/js/script.js"></script>
     <script src="../MittsWeb/js/bottomSheet.js"></script>
+    <script src="../MittsWeb/js/hamburgerMenu.js"></script>
 </body>
 </html>
