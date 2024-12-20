@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: Mulish;
-  src: url('../font/Mulish-Regular.ttf');
+  src: url('../font/Mulish-Regular.woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -284,6 +284,8 @@ body {
   border: none;
   color: #666687;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;  /* Animasyonun performansını artırmak için */
+
   position: relative;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -954,8 +956,8 @@ body {
 
   .menu-item h3{
     padding: 0;
-    margin-top: 1em;
-    margin-bottom: 2em;
+    margin-top: 0.4em;
+    margin-bottom: 2.5em;
     height: .5em;
     max-height: .5em;
   }

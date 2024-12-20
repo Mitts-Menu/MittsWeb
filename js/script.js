@@ -134,7 +134,7 @@ function handleCategoryClick(categoryButton) {
   categoryButton.classList.add('active');
 
   const categoryName = categoryButton.innerText;
-  const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);
+  const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);  
   
   if (itemContainer) {
     const offset = 150;
@@ -225,12 +225,19 @@ function createMenuItem(item) {
 }
 
 function adjustFontSize(element) {
-  const screenScale = Math.max(0.8, Math.min(window.innerWidth / 1440, 1));
-  const maxFontSize = 16 * screenScale;
-  const minFontSize = 12 * screenScale;
+  const screenScale = Math.max(0.8, Math.min(window.innerWidth / 1440, 1));  
+  const maxFontSize = 16 * screenScale;  
+  const minFontSize = 14 * screenScale; 
 
-  let fontSize = element.textContent.length > 30 ? maxFontSize - (element.textContent.length - 30) * 0.2 : maxFontSize;
-  element.style.fontSize = `${Math.max(fontSize, minFontSize)}px`;
+  let fontSize = maxFontSize;
+  if (element.textContent.length > 30) {
+    fontSize = maxFontSize - (element.textContent.length - 30);  
+  }
+
+  fontSize = Math.max(minFontSize, fontSize);  
+
+  element.style.fontSize = `${fontSize}px`;
+  element.style.letterSpacing = '0.5px';  
 }
 
 function filterItems() {
