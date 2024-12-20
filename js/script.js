@@ -253,12 +253,12 @@ function createMenuItem(item) {
 function adjustFontSize(element) {
   const screenScale = Math.max(0.8, Math.min(window.innerWidth / 1440, 1));  
   const maxFontSize = 16 * screenScale;  
-  const minFontSize = 14 * screenScale; 
+  const minFontSize = 13 * screenScale; 
 
 
   let fontSize = maxFontSize;
-  if (element.textContent.length > 30) {
-    fontSize = maxFontSize - (element.textContent.length - 30);  
+  if (element.textContent.length > 25) {
+    fontSize = maxFontSize - (element.textContent.length - 25);  
   }
 
   fontSize = Math.max(minFontSize, fontSize);  
