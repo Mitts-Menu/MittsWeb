@@ -5,15 +5,6 @@
 * Browsers: last 4 version
 */
 
-/* Font Tanımlamaları */
-
-@font-face {
-  font-family: 'Mulish';
-  src: url('../font/Mulish-Regular.woff2') format('woff2'), 
-       url('../font/Mulish-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
 
 html {
   scroll-behavior: smooth;
@@ -21,7 +12,7 @@ html {
 /* Temel Stil Ayarları */
 
 body {
-  font-family: Mulish;
+  font-family: 'Mulish';
   background-color: #F7F7F7;
   font-size: 16px;
   -webkit-user-select: none;
