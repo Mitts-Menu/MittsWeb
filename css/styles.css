@@ -229,8 +229,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;  /* İkon genişliğini ayarlayın */
-  height: 40px; /* İkon yüksekliğini ayarlayın */
+  width: 25px;  /* İkon genişliğini ayarlayın */
+  height: 25px; /* İkon yüksekliğini ayarlayın */
   transition: transform 0.3s ease; /* Hover efekti */
 }
 
