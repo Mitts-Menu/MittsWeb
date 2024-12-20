@@ -8,8 +8,9 @@
 /* Font Tanımlamaları */
 
 @font-face {
-  font-family: Mulish;
-  src: url('../font/Mulish-Regular.woff2');
+  font-family: 'Mulish';
+  src: url('../font/Mulish-Regular.woff2') format('woff2'), 
+       url('../font/Mulish-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
