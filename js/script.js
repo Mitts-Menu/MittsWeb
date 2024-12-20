@@ -134,7 +134,7 @@ function handleCategoryClick(categoryButton) {
   categoryButton.classList.add('active');
 
   const categoryName = categoryButton.innerText;
-  const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);  
+  const itemContainer = document.querySelector(`.item-container[data-category="${categoryName}"]`);
   
   if (itemContainer) {
     const offset = 150;
@@ -148,21 +148,26 @@ function handleCategoryClick(categoryButton) {
   }
 }
 
+
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return;
 
-  if (window.scrollY === 0) {
-    document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
-    document.querySelector('.category-button')?.classList.add('active');
-    return;
-  }
+  // Debounce işlemi, hızlı kaydırmada işlemi sadece bir kez yapacak
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    updateActiveCategory();
+  }, 100);  // 100 ms sonra çalışacak, hızlı kaydırmada tekrarlanmaz
+});
 
+function updateActiveCategory() {
   const categories = document.querySelectorAll('.item-container');
   let closestCategory = null;
   let minDistance = Infinity;
 
   categories.forEach(category => {
-    const distance = Math.abs(category.getBoundingClientRect().top - 150);
+    const rect = category.getBoundingClientRect();
+    const distance = Math.abs(rect.top - 150);  // Offset'i 150px olarak belirledik
+
     if (distance < minDistance) {
       minDistance = distance;
       closestCategory = category;
@@ -171,12 +176,24 @@ window.addEventListener('scroll', () => {
 
   if (closestCategory) {
     const categoryName = closestCategory.dataset.category;
+
+    // Aktif kategori butonlarını güncelle
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
+
     const activeButton = Array.from(document.querySelectorAll('.category-button')).find(btn => btn.innerText === categoryName);
-    if (activeButton) activeButton.classList.add('active');
-    activeButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    if (activeButton) {
+      activeButton.classList.add('active');
+      
+      // ScrollIntoView ile aktif butonu ortalamaya çalışıyoruz
+      activeButton.scrollIntoView({
+        behavior: 'smooth',  // Akıcı kaydırma
+        block: 'nearest',   // En yakın hizalama
+        inline: 'center'    // Yatayda ortalama
+      });
+    }
   }
-});
+}
+
 
 categoryTitles.addEventListener('mousedown', (e) => {
   isMouseDown = true;
@@ -229,6 +246,7 @@ function adjustFontSize(element) {
   const maxFontSize = 16 * screenScale;  
   const minFontSize = 14 * screenScale; 
 
+
   let fontSize = maxFontSize;
   if (element.textContent.length > 30) {
     fontSize = maxFontSize - (element.textContent.length - 30);  
@@ -238,6 +256,7 @@ function adjustFontSize(element) {
 
   element.style.fontSize = `${fontSize}px`;
   element.style.letterSpacing = '0.5px';  
+
 }
 
 function filterItems() {
