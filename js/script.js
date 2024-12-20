@@ -152,11 +152,20 @@ function handleCategoryClick(categoryButton) {
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return;
 
-  // Debounce işlemi, hızlı kaydırmada işlemi sadece bir kez yapacak
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    updateActiveCategory();
-  }, 100);  // 100 ms sonra çalışacak, hızlı kaydırmada tekrarlanmaz
+  // Sayfa en üstte olup olmadığını kontrol et
+  if (window.scrollY === 0) {
+    document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
+    const allButton = document.querySelector('.category-button'); 
+    if (allButton) {
+      allButton.classList.add('active');
+    }
+  } else {
+    // Eğer sayfa en üstte değilse, kaydırma işlemi yapılıyor
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      updateActiveCategory();
+    }, 80);  // 100 ms sonra çalışacak, hızlı kaydırmada tekrarlanmaz
+  }
 });
 
 function updateActiveCategory() {
@@ -184,7 +193,7 @@ function updateActiveCategory() {
     if (activeButton) {
       activeButton.classList.add('active');
       
-      // ScrollIntoView ile aktif butonu ortalamaya çalışıyoruz
+      // Kaydırma işlemi sırasında aktif butonu ortalamaya çalışıyoruz
       activeButton.scrollIntoView({
         behavior: 'smooth',  // Akıcı kaydırma
         block: 'nearest',   // En yakın hizalama
