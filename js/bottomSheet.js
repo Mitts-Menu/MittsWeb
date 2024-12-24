@@ -25,6 +25,7 @@ function showBottomSheet(item) {
             overlay.classList.add('active');
             
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('no-scroll');
         });
     };
     img.src = item.image_url;
@@ -40,6 +41,7 @@ function hideBottomSheet() {
             bottomSheet.classList.remove('active');
             overlay.classList.remove('active');
             document.body.style.overflow = 'auto';
+            document.body.classList.remove('no-scroll');
         }, 300);
     });
 }

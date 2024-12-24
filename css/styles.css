@@ -50,6 +50,7 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .header-img {
@@ -290,26 +291,26 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 25px;  /* İkon genişliğini ayarlayın */
-  height: 25px; /* İkon yüksekliğini ayarlayın */
+  width: 25px;
+  height: 25px;
   -webkit-transition: -webkit-transform 0.3s ease;
   transition: -webkit-transform 0.3s ease;
   -o-transition: transform 0.3s ease;
   transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease; /* Hover efekti */
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
 }
 
 .icon img {
-  width: 100%; /* Görselin boyutunu icon boyutuna uydur */
-  height: 100%; /* Görselin boyutunu icon boyutuna uydur */
+  width: 100%;
+  height: 100%;
   -o-object-fit: contain;
-     object-fit: contain; /* Görselin orijinal oranını koruyarak kutuya sığdır */
+     object-fit: contain;
 }
 
 .icon:hover {
   -webkit-transform: scale(1.1);
       -ms-transform: scale(1.1);
-          transform: scale(1.1); /* Hover'da biraz büyütme efekti */
+          transform: scale(1.1);
 }
 
 /* Kategori Seçici */
@@ -362,15 +363,16 @@ body {
   -webkit-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   -o-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform, opacity;  /* Animasyonun performansını artırmak için */
+    will-change: transform, opacity;
 
   position: relative;
   cursor: pointer;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  scroll-snap-align: start; /* Kaydırırken her butonun başlangıç noktasında hizalanmasını sağlar */
+  scroll-snap-align: start;
   -ms-flex-negative: 0;
-      flex-shrink: 0; /* Butonlar küçülmesin */
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
 
 }
 
@@ -445,6 +447,7 @@ body {
   color: #FFB01D;
   text-decoration: none;
   font-weight: bold;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .category-header a:hover {
@@ -535,6 +538,12 @@ body {
 
 /* Bottom Sheet */
 
+.no-scroll {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 .bottom-sheet {
   position: fixed;
   width: 100%;
@@ -548,25 +557,25 @@ body {
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5rem 5rem 0 0;
   transform: translateY(100%);
-  -webkit-transform: translateY(100%); /* Safari */
+  -webkit-transform: translateY(100%);
   transition: transform 0.4s ease-in-out, height 0.4s ease-in-out;
-  -webkit-transition: transform 0.4s ease-in-out, height 0.4s ease-in-out; /* Safari */
+  -webkit-transition: transform 0.4s ease-in-out, height 0.4s ease-in-out;
   z-index: 1000;
 }
 
 .bottom-sheet-content {
   padding: 2em;
-  display: -webkit-box;      /* Eski Safari ve iOS */
-  display: -ms-flexbox;      /* IE 10 */
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column; /* Safari */
+  -webkit-flex-direction: column;
   flex-direction: column;
   position: relative;
 }
 
 .bottom-sheet.active {
   transform: translateY(0);
-  -webkit-transform: translateY(0); /* Safari */
+  -webkit-transform: translateY(0);
 }
 
 .bottomsheet-img {
@@ -574,9 +583,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -80%) scale(1);
-  -webkit-transform: translate(-50%, -80%) scale(1); /* Safari */
+  -webkit-transform: translate(-50%, -80%) scale(1);
   transition: transform 0.3s ease-in-out;
-  -webkit-transition: transform 0.3s ease-in-out; /* Safari */
+  -webkit-transition: transform 0.3s ease-in-out;
   pointer-events: none;
 }
 
@@ -592,9 +601,6 @@ body {
   bottom: 0;
   z-index: 1;
   margin-bottom: 7em;
-  /* display: flex; */ /* Eğer flex kullanmak istiyorsanız, aşağıdaki gibi düzenleyin */
-  /* align-items: center; */
-  /* justify-content: center; */
 }
 
 .bottomsheet-name {
@@ -682,6 +688,7 @@ body {
 
 .back-button {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .back-icon {
