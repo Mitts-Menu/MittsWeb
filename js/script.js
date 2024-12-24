@@ -152,19 +152,19 @@ function handleCategoryClick(categoryButton) {
 window.addEventListener('scroll', () => {
   if (isUserScrolling) return;
 
-  // Sayfa en üstte olup olmadığını kontrol et
-  if (window.scrollY === 0) {
+  // Sayfa en üstte olup olmadığını kontrol et (10 piksel toleransla)
+  if (window.scrollY <= 50) {
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
     const allButton = document.querySelector('.category-button'); 
     if (allButton) {
       allButton.classList.add('active');
     }
   } else {
-    // Eğer sayfa en üstte değilse, kaydırma işlemi yapılıyor
+    // Sayfa en üstte değilse, aktif kategoriyi güncelle
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
       updateActiveCategory();
-    }, 80);  // 100 ms sonra çalışacak, hızlı kaydırmada tekrarlanmaz
+    }, 80);  // 80 ms sonra çalışacak
   }
 });
 
