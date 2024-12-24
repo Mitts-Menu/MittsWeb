@@ -22,6 +22,7 @@ let isUserScrolling = false;
 let isTouching = false;
 let isMouseDown = false;
 let scrollTimeout;
+let startX, scrollLeft;
 
 const languageTexts = {
   tr: { viewAll: "Hepsini Gör" },
@@ -29,6 +30,19 @@ const languageTexts = {
 };
 
 fetchMenu();
+
+// Debounce Fonksiyonu
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 $(document).ready(function() {
   $('#language-selector').select2({
@@ -99,17 +113,24 @@ function createCategoryHeader(category) {
 
 function updateCategoryTitles(categories) {
   categoryTitles.innerHTML = '';
+  
   const allButton = document.createElement('button');
   allButton.className = 'category-button active';
+  allButton.id = 'all-button';  // Özel ID ekledik
   allButton.innerText = 'Tümü';
   
   allButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
     allButton.classList.add('active');
+    
+    // "Tümü" butonunu görünür yapmak için kaydırma
+    allButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    categoryTitles.scrollTo({ left: 0, behavior: 'smooth' });
   });
 
   categoryTitles.appendChild(allButton);
+  
   categories.forEach(createCategoryButton);
 }
 
@@ -122,8 +143,14 @@ function createCategoryButton(category) {
     if (!isTouching) handleCategoryClick(categoryButton);
   });
 
-  categoryButton.addEventListener('touchstart', () => isTouching = true, { passive: true });
-  categoryButton.addEventListener('touchend', () => isTouching = false);
+  categoryButton.addEventListener('touchstart', () => {
+    isTouching = true;
+    isUserScrolling = false; // Kullanıcı dokunuyorsa bayrağı sıfırla
+  }, { passive: true });
+
+  categoryButton.addEventListener('touchend', () => {
+    isTouching = false;
+  });
 
   categoryTitles.appendChild(categoryButton);
 }
@@ -143,20 +170,22 @@ function handleCategoryClick(categoryButton) {
 
     categoryButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 
-    clearTimeout(scrollTimeout);
+    // Kaydırma işlemi tamamlandıktan sonra bayrağı sıfırla
     scrollTimeout = setTimeout(() => isUserScrolling = false, 1000);
   }
 }
 
-
-window.addEventListener('scroll', () => {
+window.addEventListener('scroll', debounce(() => {
   if (isUserScrolling) return;
 
-  if (window.scrollY <= 50) {
+  // Sayfanın en üstte olup olmadığını kontrol et (10 piksel toleransla)
+  if (window.scrollY <= 10) {
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
-    const allButton = document.querySelector('.category-button'); 
+    const allButton = document.getElementById('all-button'); 
     if (allButton) {
       allButton.classList.add('active');
+      allButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      categoryTitles.scrollTo({ left: 0, behavior: 'smooth' });
     }
   } else {
     clearTimeout(scrollTimeout);
@@ -164,7 +193,7 @@ window.addEventListener('scroll', () => {
       updateActiveCategory();
     }, 65);  
   }
-});
+}, 100)); // 100 ms debounce
 
 function updateActiveCategory() {
   const categories = document.querySelectorAll('.item-container');
@@ -191,16 +220,14 @@ function updateActiveCategory() {
     if (activeButton) {
       activeButton.classList.add('active');
       
-      // Kaydırma işlemi sırasında aktif butonu ortalamaya çalışıyoruz
       activeButton.scrollIntoView({
         behavior: 'smooth',  // Akıcı kaydırma
-        block: 'nearest',   // En yakın hizalama
-        inline: 'center'    // Yatayda ortalama
+        block: 'nearest',    // En yakın hizalama
+        inline: 'center'     // Yatayda ortalama
       });
     }
   }
 }
-
 
 categoryTitles.addEventListener('mousedown', (e) => {
   isMouseDown = true;
@@ -253,7 +280,6 @@ function adjustFontSize(element) {
   const maxFontSize = 16 * screenScale;  
   const minFontSize = 13 * screenScale; 
 
-
   let fontSize = maxFontSize;
   if (element.textContent.length > 25) {
     fontSize = maxFontSize - (element.textContent.length - 25);  
@@ -263,7 +289,6 @@ function adjustFontSize(element) {
 
   element.style.fontSize = `${fontSize}px`;
   element.style.letterSpacing = '0.5px';  
-
 }
 
 function filterItems() {
