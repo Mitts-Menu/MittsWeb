@@ -31,7 +31,6 @@ const languageTexts = {
 
 fetchMenu();
 
-// Debounce Fonksiyonu
 function debounce(func, wait) {
   let timeout;
   return function(...args) {
@@ -116,7 +115,7 @@ function updateCategoryTitles(categories) {
   
   const allButton = document.createElement('button');
   allButton.className = 'category-button active';
-  allButton.id = 'all-button';  // Özel ID ekledik
+  allButton.id = 'all-button';
   allButton.innerText = 'Tümü';
   
   allButton.addEventListener('click', () => {
@@ -124,7 +123,6 @@ function updateCategoryTitles(categories) {
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
     allButton.classList.add('active');
     
-    // "Tümü" butonunu görünür yapmak için kaydırma
     allButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     categoryTitles.scrollTo({ left: 0, behavior: 'smooth' });
   });
@@ -145,7 +143,7 @@ function createCategoryButton(category) {
 
   categoryButton.addEventListener('touchstart', () => {
     isTouching = true;
-    isUserScrolling = false; // Kullanıcı dokunuyorsa bayrağı sıfırla
+    isUserScrolling = false;
   }, { passive: true });
 
   categoryButton.addEventListener('touchend', () => {
@@ -170,7 +168,6 @@ function handleCategoryClick(categoryButton) {
 
     categoryButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 
-    // Kaydırma işlemi tamamlandıktan sonra bayrağı sıfırla
     scrollTimeout = setTimeout(() => isUserScrolling = false, 1000);
   }
 }
@@ -178,7 +175,6 @@ function handleCategoryClick(categoryButton) {
 window.addEventListener('scroll', debounce(() => {
   if (isUserScrolling) return;
 
-  // Sayfanın en üstte olup olmadığını kontrol et (10 piksel toleransla)
   if (window.scrollY <= 10) {
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
     const allButton = document.getElementById('all-button'); 
@@ -193,7 +189,7 @@ window.addEventListener('scroll', debounce(() => {
       updateActiveCategory();
     }, 65);  
   }
-}, 100)); // 100 ms debounce
+}, 100));
 
 function updateActiveCategory() {
   const categories = document.querySelectorAll('.item-container');
@@ -202,7 +198,7 @@ function updateActiveCategory() {
 
   categories.forEach(category => {
     const rect = category.getBoundingClientRect();
-    const distance = Math.abs(rect.top - 150);  // Offset'i 150px olarak belirledik
+    const distance = Math.abs(rect.top - 150);
 
     if (distance < minDistance) {
       minDistance = distance;
@@ -212,8 +208,6 @@ function updateActiveCategory() {
 
   if (closestCategory) {
     const categoryName = closestCategory.dataset.category;
-
-    // Aktif kategori butonlarını güncelle
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
 
     const activeButton = Array.from(document.querySelectorAll('.category-button')).find(btn => btn.innerText === categoryName);
@@ -221,9 +215,9 @@ function updateActiveCategory() {
       activeButton.classList.add('active');
       
       activeButton.scrollIntoView({
-        behavior: 'smooth',  // Akıcı kaydırma
-        block: 'nearest',    // En yakın hizalama
-        inline: 'center'     // Yatayda ortalama
+        behavior: 'smooth',  
+        block: 'nearest',    
+        inline: 'center'     
       });
     }
   }

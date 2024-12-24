@@ -269,6 +269,22 @@ body {
 .menu-link:hover {
   color: #FFB01D;
 }
+
+.overlay-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+}
+
+.overlay-menu.active {
+  display: block;
+}
+
 /* Hamburger Menu Icons */
 .menu-icons {
   display: -webkit-box;
