@@ -257,7 +257,7 @@ function createMenuItem(item) {
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item';
   menuItem.innerHTML = `
-    <img src="${item.image_url}" alt="${item.name}">
+    <img src="${item.image_url}" alt="${item.name}" loading="eager">
     <h3 class="item-name">${item.name}</h3>
     <p class="item-price">₺${item.price}</p>
   `;
