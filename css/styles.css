@@ -551,6 +551,13 @@ body {
   color: #f57c00;
   font-weight: bold;
 }
+.menu-item img.loading {
+  opacity: 0.5; /* Placeholder sırasında şeffaflık */
+}
+
+.menu-item img.loaded {
+  opacity: 1;
+}
 
 /* Bottom Sheet */
 
@@ -562,6 +569,7 @@ body {
 
 .bottom-sheet {
   position: fixed;
+  padding: 0;
   width: 100%;
   max-width: 1200px;
   bottom: 0;
@@ -580,7 +588,6 @@ body {
 }
 
 .bottom-sheet-content {
-  padding: 2em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -613,16 +620,19 @@ body {
 }
 
 .bottomsheet-desc {
+  width: 100%;
   position: fixed;
   bottom: 0;
+  margin: 0;
   z-index: 1;
   margin-bottom: 7em;
+  padding: 1rem; /* Padding ekleyebilirsiniz */
+  box-sizing: border-box; /* Genişlik, padding'i hesaba katar */
 }
 
 .bottomsheet-name {
   margin: 0;
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
 }
@@ -1222,13 +1232,8 @@ body {
     border-radius: 2rem 2rem 0 0;
   }
   .bottomsheet-desc{
-    margin: 1em;
     margin-bottom: 5em;
   }
-  .bottom-sheet-content {
-    padding: 1em;
-  }
-
   .bottomsheet-img img{
     width: 12rem;
     height: 12rem;
