@@ -254,20 +254,41 @@ function renderMenuItems(category) {
 }
 
 function createMenuItem(item) {
+  const placeholderImage = "../MittsWeb/img/mitts_logo.png"; // Placeholder resmi
   const menuItem = document.createElement('div');
   menuItem.className = 'menu-item';
+
+  // HTML yapısı; resim yüklenene kadar placeholder gösteriliyor
   menuItem.innerHTML = `
-    <img src="${item.image_url}" alt="${item.name}" loading="eager">
+    <img src="${placeholderImage}" data-src="${item.image_url}" alt="${item.name}" class="menu-image">
     <h3 class="item-name">${item.name}</h3>
     <p class="item-price">₺${item.price}</p>
   `;
 
+  // Resmi asenkron olarak yükle
+  const imageElement = menuItem.querySelector('.menu-image');
+  const realImageSrc = item.image_url;
+
+  // Gerçek resmi yükleyerek placeholder'ı değiştir
+  const realImage = new Image();
+  realImage.onload = () => {
+    imageElement.src = realImageSrc; // Resim başarıyla yüklendiğinde kaynak değişir
+  };
+  realImage.onerror = () => {
+    console.error(`Resim yüklenemedi: ${realImageSrc}`); // Yüklenemezse placeholder kalır
+  };
+  realImage.src = realImageSrc;
+
+  // Menü öğesine tıklama olayı ekle
   menuItem.addEventListener('click', () => showBottomSheet(item));
+  
+  // Font boyutunu ayarla
   adjustFontSize(menuItem.querySelector('.item-name'));
   adjustFontSize(menuItem.querySelector('.item-price'));
 
   return menuItem;
 }
+
 
 function adjustFontSize(element) {
   const screenScale = Math.max(0.8, Math.min(window.innerWidth / 1440, 1));  
