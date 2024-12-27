@@ -251,6 +251,51 @@ function renderMenuItems(category) {
   });
 
   menuContainer.appendChild(itemContainer);
+
+   // Kaydırma işlemini etkinleştir
+   let isDown = false;
+   let isDragging = false; // Sürükleme olup olmadığını kontrol etmek için
+   let startX;
+   let scrollLeft;
+ 
+   itemContainer.addEventListener('mousedown', (e) => {
+     isDown = true;
+     isDragging = false; // Başlangıçta sürükleme olmadığını belirt
+     itemContainer.classList.add('active'); // Opsiyonel görsel geri bildirim
+     startX = e.pageX - itemContainer.offsetLeft;
+     scrollLeft = itemContainer.scrollLeft;
+   });
+ 
+   itemContainer.addEventListener('mouseleave', () => {
+     isDown = false;
+     itemContainer.classList.remove('active');
+   });
+ 
+   itemContainer.addEventListener('mouseup', () => {
+     isDown = false;
+     itemContainer.classList.remove('active');
+   });
+ 
+   itemContainer.addEventListener('mousemove', (e) => {
+     if (!isDown) return;
+     e.preventDefault();
+     const x = e.pageX - itemContainer.offsetLeft;
+     const walk = (x - startX) * 2; // Kaydırma hızı
+     if (Math.abs(walk) > 5) { // Belirli bir mesafeden fazla hareket varsa sürükleme say
+       isDragging = true;
+     }
+     itemContainer.scrollLeft = scrollLeft - walk;
+   });
+ 
+   // Tıklama olayını engelle
+   itemContainer.querySelectorAll('.menu-item').forEach((menuItem) => {
+     menuItem.addEventListener('click', (e) => {
+       if (isDragging) {
+         e.preventDefault(); // Sürükleme sırasında tıklamayı iptal et
+         isDragging = false; // Bayrağı sıfırla
+       }
+     });
+   });
 }
 
 function createMenuItem(item) {

@@ -365,6 +365,7 @@ body {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
   scroll-behavior: smooth;
+  justify-content: center;
 }
 
 .category-button {
