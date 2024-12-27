@@ -38,9 +38,14 @@ function fetchCategoryProducts() {
           selectedCategory.items.forEach(item => {
             const menuItem = document.createElement('div');
             menuItem.className = 'category-content';
+
+            // Placeholder resmi
+            const placeholderImage = '../img/mitts_logo.png';
+
+            // HTML yapısında başlangıçta placeholder gösteriliyor
             menuItem.innerHTML = `
               <div class="content-img">
-                <img src="${item.image_url}" alt="${item.name}">
+                <img src="${placeholderImage}" alt="${item.name}" class="menu-image">
               </div>
               <div class="content-desc">
                 <h3>${item.name}</h3>
@@ -49,12 +54,27 @@ function fetchCategoryProducts() {
               </div>
             `;
 
+            // Resim öğesini al
+            const imageElement = menuItem.querySelector('.menu-image');
+            const realImageSrc = item.image_url;
+
+            // Gerçek resmi asenkron olarak yükle
+            const realImage = new Image();
+            realImage.onload = () => {
+              imageElement.src = realImageSrc; // Resim yüklendiğinde gerçek resmi ata
+            };
+            realImage.onerror = () => {
+              console.error(`Resim yüklenemedi: ${realImageSrc}`); // Yüklenemezse placeholder kalır
+            };
+            realImage.src = realImageSrc;
+
+            // Menü öğesine tıklama olayı ekle
             menuItem.addEventListener('click', () => {
               showBottomSheet({
                 name: item.name,
                 price: item.price,
                 description: item.description,
-                image_url: item.image_url
+                image_url: item.image_url,
               });
             });
 
